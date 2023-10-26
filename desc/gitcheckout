@@ -1,0 +1,103 @@
+=================
+branch operations
+=================
+(1) init state
+--------------
+$ git log --graph --oneline --all --decorate
+* c5d06c7 (HEAD, origin/master, origin/HEAD, master) update readme
+* 5924c7a update readme
+...
+* 8f43702 Update train_11.py
+* 1827c4d first commit
+
+(2) check the diff between origin.master and local.master
+---------------------------------------------------------
+$ git log ..origin/master
+$ git log origin/master..
+
+(3) check the current branches
+------------------------------
+$ git branch --list
+* master
+
+(4) create a new branch named testbranch and startup at commit 5924c7a
+----------------------------------------------------------------------
+$ git checkout -b testbranch 5924c7a
+Switched to a new branch 'testbranch'
+
+(5) check the state
+-------------------
+$ git log --graph --oneline --decorate --all
+* c5d06c7 (origin/master, origin/HEAD, master) update readme
+* 5924c7a (HEAD, testbranch) update readme                                 # switch to this state
+* eb7818e update readme
+...
+* 8f43702 Update train_11.py
+* 1827c4d first commit
+
+(6) switch between the branches
+-------------------------------
+$ git checkout master
+Switched to branch 'master'
+
+$ git checkout testbranch
+Switched to branch 'testbranch'
+
+(7) del the testbranch
+----------------------
+$ git branch -d testbranch
+error: Cannot delete the branch 'testbranch' which you are currently on.
+
+$ git checkout master                                                  # switch to another branch
+Switched to branch 'master'
+
+$ git branch -d testbranch                                             # delete the branch
+Deleted branch testbranch (was 5924c7a).
+
+$ git log --graph --oneline --all --decorate                           # check the state
+* c5d06c7 (HEAD, origin/master, origin/HEAD, master) update readme
+* 5924c7a update readme
+...
+* 8f43702 Update train_11.py
+* 1827c4d first commit
+
+===================================================
+revert file in wkdir to the state of certain commit
+===================================================
+(1) check the commits of certain file
+-------------------------------------
+$ git log --graph --follow --oneline readme.txt
+* c5d06c7 update readme
+* 5924c7a update readme
+* eb7818e update readme
+...
+* 1827c4d first commit
+
+(2) revert the file to commit 5924c7a
+-------------------------------------
+$ git checkout 5924c7a -- readme.txt                    # see also: https://stackoverflow.com/a/22750480 
+$ git diff
+$ git diff --staged                                     # checkout file will keep wkdir/index as pending to commit state
+diff --git a/readme.txt b/readme.txt
+index 7c3f4ba..84f3e31 100644
+--- a/readme.txt
++++ b/readme.txt
+@@ -18,4 +18,4 @@
+   + namedtuples.py -> 模块定义了训练集、测试集中数据样本的基本格式
+   ...
+
+$ git status                                            # readme at 5924c7a, local at c5d06c7, a gap existed
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#       modified:   readme.txt
+#
+
+(3) revert back to c5d06c7
+--------------------------
+$ git checkout c5d06c7 -- readme.txt
+$ git diff
+$ git status                                            # no gap anymore
+# On branch master
+nothing to commit, working directory clean

@@ -1,0 +1,54 @@
+official doc
+------------
+ref: https://docs.docker.com/engine/reference/commandline/login/#login-to-a-self-hosted-registry
+
+build dockerfile.base done, but failed to push to self-hosted registry
+----------------------------------------------------------------------
+# try build docker image and push to registry
+  Successfully built 56a3dc7751cc
+  Successfully tagged rebornlinux/base:v1.1.3-9426d3d
+  docker tag rebornlinux/base:v1.1.3-9426d3d rebornlinux/base:latest
+  Are you sure to push rebornlinux/base:v1.1.3-9426d3d to rebornlinux-docker-local.artifactory-blr1.int.net.nokia.com                                     /rebornlinux/base:v1.1.3-9426d3d ?
+  if not press Ctrl+C - enter to continue
+  docker tag rebornlinux/base:v1.1.3-9426d3d rebornlinux-docker-local.artifactory-blr1.int.net.nokia.com/rebornlinux/base:v1.1.3-9426d3d
+  docker push rebornlinux-docker-local.artifactory-blr1.int.net.nokia.com/rebornlinux/base:v1.1.3-9426d3d
+  The push refers to repository [rebornlinux-docker-local.artifactory-blr1.int.net.nokia.com/rebornlinux/base]
+  351171b01250: Preparing
+  5a78cc66ed7b: Preparing
+  0ceb0d9f046b: Preparing
+  24f055fa3ec3: Preparing
+  2190532b78f0: Preparing
+  36b50b131297: Waiting
+  unauthorized: User is unauthorized to upload to rebornlinux-docker-local/rebornlinux/base/_uploads
+  make: *** [docker_build.base] Error 1
+
+solutions
+---------
+# for default u/p in docker hub -> no this case
+  $ docker login
+  Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+  Username: metung
+  Password:
+  Error response from daemon: Get "https://registry-1.docker.io/v2/": unauthorized: incorrect username or password
+
+# for self-hosted registry -> worked
+  $ docker login rebornlinux-docker-local.artifactory-blr1.int.net.nokia.com
+  Username: metung
+  Password:
+  WARNING! Your password will be stored unencrypted in /home/metung/.docker/config.json.
+  Configure a credential helper to remove this warning. See
+  https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+  
+  Login Succeeded
+
+# retry tag/pushing -> solved
+  $ docker tag rebornlinux/base:v1.1.3-9426d3d rebornlinux-docker-local.artifactory-blr1.int.net.nokia.com/rebornlinux/base:v1.1.3-9426d3d
+  $ docker push rebornlinux-docker-local.artifactory-blr1.int.net.nokia.com/rebornlinux/base:v1.1.3-9426d3d
+  The push refers to repository [rebornlinux-docker-local.artifactory-blr1.int.net.nokia.com/rebornlinux/base]
+  351171b01250: Pushed
+  5a78cc66ed7b: Pushed
+  0ceb0d9f046b: Pushed
+  24f055fa3ec3: Pushed
+  2190532b78f0: Pushing [=====>                                             ]  27.96MB/278.5MB
+  36b50b131297: Layer already exists
+

@@ -1,0 +1,44 @@
+dockerfile multistage build for "minimal image"
+===============================================
+
+official doc
+------------
+ref: https://docs.docker.com/build/building/multi-stage/#use-a-previous-stage-as-a-new-stage
+
+# dockerfile with 2 stage inside
+  FROM golang:1.21 as build                 # stage 1: name the stage as "build"
+  # FROM golang:1.21
+  WORKDIR /src
+  COPY <<EOF /src/main.go                   # create file "main.go" with content
+  package main
+  
+  import "fmt"
+  
+  func main() {
+    fmt.Println("hello, world")
+  }
+  EOF
+  RUN go build -o /bin/hello ./main.go
+  
+  FROM scratch                              # stage 2
+  COPY --from=build /bin/hello /bin/hello   # copy only the binary from build stage on the top of scratch
+  # COPY --from=0 /bin/hello /bin/hello     # 0: the previous stage, used when no name is given
+  CMD ["/bin/hello"]
+
+# build docker image at certain stage
+$ docker build --target build -t hello .    # use "--target" to build specific stage
+
+# use an external image as a stage 
+  todo
+
+# use previous stage as a new stage
+  todo
+
+# differences between legacy builder and BuildKit
+  todo
+
+
+reborn linux working examples (todo summarize here)
+---------------------------------------------------
+ref: https://gitlabe1.ext.net.nokia.com/rebornlinux/devkit
+dockerfile.base -> dockerfile.toolchain -> dockerfile.devkit

@@ -1,0 +1,30 @@
+find the right syntax for your YAML multiline strings (interactive)
+-------------------------------------------------------------------
+ref: https://yaml-multiline.info/ 
+
+
+yaml docs with examples
+-----------------------
+ref: https://yaml.org/spec/1.2.2/
+
+
+example illustrating how to use multiline yaml
+----------------------------------------------
+a yaml file which is used to make up the docker runtime command with dynamic arranged options:
+  ```yaml
+  additional_run_parameters :
+    - '-e BOARD={{ vars.board_v.board }}'
+    - '--privileged --cap-add all'
+    {% if values.inband and values.ipv6 %}
+    - '--sysctl net.ipv6.conf.all.disable_ipv6=0'
+    {% endif %}
+    - '--volumes-from nt_{{ vars.slot }}'
+    - >-
+      -e OPTION1='-smbios type=1,product="TIMOS: chassis=IXR-R6 card=cpiom-ixr-r6 slot={{ 'A' if vars.slot == 1 else 'B' }}"'
+  ```
+the OPTION1 is an env var to pass inside entrypoint.sh inside docker container,
+the outmost single quote is used for docker to make the contents interpreted together:
+  $ docker run -e '-smbios type=1,product="TIMOS...'
+but not as:
+  $ docker run -e -smbios type=1,product="TIMOS...
+which will lead to docker cmdline failure to recognize "type=1..."

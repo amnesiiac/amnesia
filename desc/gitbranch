@@ -1,0 +1,19 @@
+what is a tracking branch
+-------------------------
+ref: https://stackoverflow.com/a/4693780
+
+setup other tracking branch not existed in local
+------------------------------------------------
+$ git checkout -b ${branch} ${remote}/${branch}    # method1
+$ git checkout --track ${remote}/${branch}         # method2 git>1.6.2
+
+list remote tracking branches
+-----------------------------
+$ git branch --list -r
+  origin/HEAD -> origin/master
+  origin/master
+
+del remote branches
+-------------------
+$ git branch -d -r ${origin}/${branch_to_del}      # method1
+$ git push ${origin} -d ${branch_to_del}           # method2

@@ -1,0 +1,73 @@
+how to use perf tool inside docker container
+============================================
+
+preliminary try
+---------------
+$ docker run -it --rm alpine bash
+$ apk update && apk add perf                                  # enable perf
+$ perf record -F 9999 -g -o perf.data python3 script.py       # facing errors
+
+  perf_event_open(…, PERF_FLAG_FD_CLOEXEC) failed with unexpected error 1 (Operation not permitted)
+  perf_event_open(…, 0) failed unexpectedly with error 1 (Operation not permitted)
+  Error:
+  No permission to enable cycles event. You may not have permission to collect stats.
+  Consider tweaking /proc/sys/kernel/perf_event_paranoid,
+
+ref: https://docs.docker.com/engine/security/seccomp/
+ref: https://medium.com/@geekidea_81313/running-perf-in-docker-kubernetes-7eb878afcd42
+
+solution 1: using security option of docker
+-------------------------------------------
+# create a perf.json located at the same dir that start the container, and the content is as following:
+  https://raw.githubusercontent.com/moby/moby/master/profiles/seccomp/default.json
+  in which adding the syscall "perf_event_open" into the json syscalls array with the action: “SCMP_ACT_ALLOW”
+
+$ docker run -it --rm --security-opt seccomp=perf.json alpine bash   # run 
+$ apk update && apk add perf                                         # enable perf
+$ perf record -F 4000 -g -o perf.data python3 script.py              # succeed
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.056 MB perf.data (597 samples) ]
+
+$ perf report --stdio -ng                                            # output, but python functions are recorded as _PyEval_EvalFrameDefault
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 597  of event 'cycles:u'
+# Event count (approx.): 241947624
+#
+# Children      Self       Samples  Command  Shared Object         Symbol
+# ........  ........  ............  .......  ....................  ....................................
+#
+    31.17%    31.17%           137  python3  libpython3.12.so.1.0  [.] _PyEval_EvalFrameDefault
+            |
+            |--9.05%--0x4098c017d0340
+            |          _PyEval_EvalFrameDefault
+            |
+            |--5.90%--0x53017c0004098c
+            |          _PyEval_EvalFrameDefault
+            |
+            |--5.13%--0x7fb40053017c0004
+            |          _PyEval_EvalFrameDefault
+            |
+            |--4.11%--0x17d03400d070264
+            |          _PyEval_EvalFrameDefault
+            |
+            |--3.92%--0xa7000007fb40053
+            |          _PyEval_EvalFrameDefault
+            |
+             --1.10%--0x277e0a7000007fb4
+                       _PyEval_EvalFrameDefault
+...
+
+
+solution 2: a permenant solution to enable perf event (pollute the host settings)
+---------------------------------------------------------------------------------
+$ echo "kernel.perf_event_paranoid=-1" >> /etc/sysctl.conf
+$ sudo sysctl -p
+
+
+solution 3:
+-----------
+$ sudo sysctl kernel.perf_event_paranoid=-1

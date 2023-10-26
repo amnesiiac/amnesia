@@ -1,0 +1,115 @@
+ip netns common use cases
+=========================
+
+how to use ip netns command inside alpine container?
+----------------------------------------------------
+# 1st try -> not work
+  $ docker run -it --rm alpine sh                                            # start alpine container for test
+  $ apk update && apk add iproute2                                           # add netns tools
+  $ ip netns list                                                            # show nothing
+  $ ip netns add net1                                                        # try add a netns --> err
+  mount --make-shared /var/run/netns failed: Operation not permitted
+  $ exit
+
+# 2nd try -> not work
+  $ docker run -it --rm --cap-add NET_ADMIN alpine sh                        # net admin
+  $ apk update && apk add iproute2
+  $ ip netns list
+  $ ip netns add net1
+  $ ip netns list                                                            # successfully created new netns
+  $ ip netns add net1
+  mount --make-shared /var/run/netns failed: Operation not permitted
+
+# 3rd try -> over kill
+  $ docker run -it --rm --cap-add ALL alpine sh                              # add all cap to container
+  $ apk update && apk add iproute2
+  $ ip netns list
+  $ ip netns add net1
+  $ ip netns list                                                            # successfully created new netns
+  net1
+
+# 4th try -> over kill
+  $ docker run -it --rm --privileged alpine sh                               # privilege mode
+  $ apk update && apk add iproute2
+  $ ip netns list
+  $ ip netns add net1
+  $ ip netns list                                                            # successfully created new netns
+  net1
+
+# the difference between privilege mode and cap-add ALL: privileged >> cap-add ALL
+  ref: https://stackoverflow.com/a/66637144
+
+# offical doc: cap-add, cap-drop, privileged, -device=[]
+  ref: https://docs.docker.com/engine/reference/run/#runtime-privilege-and-linux-capabilities
+
+
+code example to examine the difference between cidrs: ip/32 and ip/24
+---------------------------------------------------------------------
+# env: inside alpine container (see upper section), run cmd as follows:
+  $ ip netns add net1                                                        # setup netns
+  $ ip netns add net2
+  $ ip link add veth1 type veth peer name veth2                              # setup veth
+  $ ip link set veth1 netns net1                                             # setup veth into netns
+  $ ip link set veth2 netns net2
+  $ ip netns exec net1 ifconfig veth1 10.0.15.1/24 up                        # setup ip/mask -> failed
+  ifconfig: bad address '10.0.15.1/24'
+  $ ip netns exec net1 ifconfig veth1 10.0.15.1 netmask 255.255.255.0 up     # try another format -> success
+  $ ip netns exec net2 ifconfig veth2 10.0.15.2/24 up                        # failed
+  $ ip netns exec net2 ifconfig veth2 10.0.15.2 netmask 255.255.255.0 up     # success
+  $ ip netns exec net1 ping 10.0.15.2                                        # exec cmd in netns net1 -> ping veth2 from veth1
+  PING 10.0.15.2 (10.0.15.2): 56 data bytes
+  64 bytes from 10.0.15.2: seq=0 ttl=64 time=0.318 ms
+  64 bytes from 10.0.15.2: seq=1 ttl=64 time=0.101 ms
+  64 bytes from 10.0.15.2: seq=2 ttl=64 time=0.102 ms
+  64 bytes from 10.0.15.2: seq=3 ttl=64 time=0.073 ms
+  ^C
+  --- 10.0.15.2 ping statistics ---
+  4 packets transmitted, 4 packets received, 0% packet loss
+  round-trip min/avg/max = 0.073/0.148/0.318 ms                              # net1.veth1 can ping net2.veth2
+
+  $ ip netns exec net2 ping 10.0.15.1                                        # exec cmd in netns net2 -> ping veth1 from veth2
+  PING 10.0.15.1 (10.0.15.1): 56 data bytes
+  64 bytes from 10.0.15.1: seq=0 ttl=64 time=0.214 ms
+  64 bytes from 10.0.15.1: seq=1 ttl=64 time=0.117 ms
+  64 bytes from 10.0.15.1: seq=2 ttl=64 time=0.081 ms
+  64 bytes from 10.0.15.1: seq=3 ttl=64 time=0.089 ms
+  ^C
+  --- 10.0.15.1 ping statistics ---
+  4 packets transmitted, 4 packets received, 0% packet loss                  # net2.veth2 can ping net1.veth1
+
+  $ ip netns exec net1 ip route                                              # check ip route table of net1/2 -> implicily added by 
+  10.0.15.0/24 dev veth1 proto kernel scope link src 10.0.15.1
+  $ ip netns exec net2 ip route
+  10.0.15.0/24 dev veth2 proto kernel scope link src 10.0.15.2
+
+# try reconfig the ip/subnetmask for net1.veth1 and net2.veth2
+  $ ip netns exec net1 ifconfig veth1 10.0.15.1 netmask 255.255.255.255 up   # config ip from /24 to /32, single host ip 
+  $ ip netns exec net2 ifconfig veth2 10.0.15.2 netmask 255.255.255.255 up   # config ip from /24 to /32, single host ip
+  $ ip netns exec net1 ping 10.0.15.2                                        # ping from net1.veth1 to net2.veth2 -> failed
+  PING 10.0.15.2 (10.0.15.2): 56 data bytes
+  ping: sendto: Network unreachable
+  $ ip netns exec net2 ping 10.0.15.1                                        # ping from net2.veth2 to net1.veth1 -> failed
+  PING 10.0.15.1 (10.0.15.1): 56 data bytes
+  ping: sendto: Network unreachable
+  $ ip netns exec net1 ip route                                              # check ip table route -> nothing
+  $ ip netns exec net2 ip route
+  $ ip netns exec net1 ip route show local                                   # check 'hidden' local route table
+  local 10.0.15.2 dev veth2 proto kernel scope host src 10.0.15.2
+  broadcast 10.0.15.255 dev veth2 proto kernel scope link src 10.0.15.2
+
+# linux implicitly adding route when add ip/subnetmask: proof test procedures
+  $ sleep 15 && ip netns exec net1 ifconfig veth1 10.0.15.1 netmask 255.255.255.0 up &       # issue the ip setup ip/netmask in 15s latter in background
+  $ ip -4 -n net1 monitor route                                                              # monitoring the ipv4 route change in net1 continuously
+  Deleted broadcast 10.0.15.255 dev veth1 table local proto kernel scope link src 10.0.15.1
+  Deleted local 10.0.15.1 dev veth1 table local proto kernel scope host src 10.0.15.1
+  local 10.0.15.1 dev veth1 table local proto kernel scope host src 10.0.15.1
+  broadcast 10.0.15.255 dev veth1 table local proto kernel scope link src 10.0.15.1
+  10.0.15.0/24 dev veth1 proto kernel scope link src 10.0.15.1
+  broadcast 10.0.15.0 dev veth1 table local proto kernel scope link src 10.0.15.1
+  ^C
+  [1]+  Done                       sleep 15 && ip netns exec net1 ifconfig veth1 10.0.15.1 netmask 255.255.255.0 up
+
+# conclusion
+ref: https://unix.stackexchange.com/a/558427  -> check for details
+Linux implicitly adds a route when an address with a netmask is set.  -> that's why ip/24 can ping each other
+When the netmask is /32 there can't be a route added this way (or actually there still is: a local scope route.

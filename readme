@@ -1,0 +1,16 @@
+# todo: when no test file to show, then no popup window action made, just stay there -> detect the first char if *, then popup, or nothing to do
+
+# todo: add help pages for showing how to control the shuttle panel
+
+# done: set max len for a panel desc to show, to make the window alignment neatly, 
+  then when the cursor highlight the line, the full string will be shown at the the first line of the current window.
+
+# todo: make the panel desc on the top of screen to be conspicuous.
+  
+# try enable after the search the menu is automatically open for the matched menu item.
+
+# try clear the search form content before hitting <tab> key to visualize the desc pages.
+
+# enable del operation when press backspace in search mode -> a bug on form.h, the form_driver(,) cannot accept for del/backspace correctly
+
+# trys: make the editor like vim or just embeded nvim/vim inside

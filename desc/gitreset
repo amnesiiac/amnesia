@@ -1,0 +1,135 @@
+examples to git reset command series
+====================================
+
+set local worktree as certain commit & do some test & reset changesets back to local
+------------------------------------------------------------------------------------
+#1: init state when do "git clone https://github.com/twistfatezz/ISEnet.git" 
+  $ git log --graph --oneline --decorate
+  * c5d06c7 (HEAD, origin/master, origin/HEAD, master) update readme
+  * 5924c7a update readme
+  ...
+  * 8f43702 Update train_11.py
+  * 1827c4d first commit
+  
+  $ git log --graph --oneline --decorate --all
+  * c5d06c7 (HEAD, origin/master, origin/HEAD, master) update readme
+  * 5924c7a update readme
+  ...
+  * 8f43702 Update train_11.py
+  * 1827c4d first commit
+
+#2: delete the latest revision, revert wktree as the state of 5924c7a
+  $ git reset --hard 5924c7a
+  HEAD is now at 5924c7a update readme
+
+#3: check the current local commited state using git log
+  $ git log --graph --oneline --decorate --all                      # show all commit including 'incoming ones' inside ref dir
+  * c5d06c7 (origin/master, origin/HEAD) update readme              # existed in log but no really existed local
+  * 5924c7a (HEAD, master) update readme                            # existed in log & existed local
+  ...
+  * 1827c4d first commit
+  
+  $ git log --graph --oneline --decorate                            # only show the local existed commit
+  * 5924c7a (HEAD, master) update readme                            # existed local are shown
+  ...
+  * 1827c4d first commit
+
+#4: show "incoming" revisions
+  $ git fetch && git log ..origin/master                            # show revision origin has but master do not has
+  commit c5d06c72d30c978bd0cef95ed7cd88720ce33a18                   # is deleted by reset
+  Author: twistfatezz <664634473@qq.com>
+  Date:   Mon Jun 6 10:32:01 2022 +0800
+  
+      update readme
+
+#5: git merge to merge "deleted/incoming" commit to wkdir
+  $ git merge                                                       # merge.defaultToUpstream is set to true since git2.0
+  fatal: No commit specified and merge.defaultToUpstream not set.   # default upstream not set, git config merge.defaultToUpstream true
+  
+  $ git merge origin/master                                         # specify the remote/branch to merge from
+  Updating 5924c7a..c5d06c7
+  Fast-forward
+   readme.txt | 2 +-
+   1 file changed, 1 insertion(+), 1 deletion(-)
+
+
+revert the changes made by multiple 'git commit --amend'
+--------------------------------------------------------
+# now we have made serveral changes using 'git commit --amend' to a commit already in merge request review stage:
+$ git log --graph --oneline --decorate                              # list one line commit history
+  * a12169d (HEAD, 5-update-middle-layer-toolchain-docker-image-as-reliance-for-devkit) rebornlinux: upload...  # commit under review 2 + amend changes
+  * 95ef9c6 rebornlinux: add middle docker image layer for separate rebornlinux...                              # commit under review 1
+  * 8f6537b (origin/main) vscode: update configs                    # the origin
+  * 9426d3d add full diff and find for kernel compiling
+  * ab615b1 install gitlab-release-cli
+  ...
+
+# now if we want to update the merge request branch, will lead to conflicts, open another merge request & resubmit is not the right way out.
+$ git push
+  To git@gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git
+   ! [rejected]        5-update-middle-layer-toolchain-docker-image-as-reliance-for-devkit -> 5-update-middle-layer-toolchain-docker-image-as-reliance-for-devkit (non-fast-forward)
+  error: failed to push some refs to 'git@gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git'
+  hint: Updates were rejected because the tip of your current branch is behind
+  hint: its remote counterpart. Merge the remote changes (e.g. 'git pull')
+  hint: before pushing again.
+  hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+# the right way to peel out the already amended changes is as follows:
+
+# check the git ammend history by:
+$ git log --reflog --oneline --no-walk                              # show reglog based on commits
+  a12169d rebornlinux: upload script folder for the commit above... # changes added by git commit --amend into a12169d
+  cffc6a7 rebornlinux: upload script folder for the commit above... # changes added by git commit --amend into a12169d
+  1619443 rebornlinux: upload script folder for the commit above... # changes added by git commit --amend into a12169d
+  ed1c7b7 rebornlinux: upload script folder for the commit above...                          # commit under review 2
+  95ef9c6 rebornlinux: add middle docker image layer for separate rebornlinux toolchain...   # commit under review 1
+  8f6537b vscode: update configs
+
+$ git reflog                                                        # show reflog based on changes made to tip of HEAD (local cache)
+  8e646a6 HEAD@{0}: commit: rebornlinux: fix types and unused comments, remove alpine version hardcode
+  ed1c7b7 HEAD@{1}: reset: moving to ed1c7b7                        # reset 1 -+
+  a12169d HEAD@{2}: reset: moving to HEAD@{1}                       # reset 2  |--> done by "git reset --soft ed1c7b7"
+  cffc6a7 HEAD@{3}: reset: moving to HEAD@{1}                       # reset 3 -+
+  a12169d HEAD@{4}: commit (amend): rebornlinux: upload script folder for the commit above:  # commit --amend 1 -+
+  cffc6a7 HEAD@{5}: commit (amend): rebornlinux: upload script folder for the commit above:  # commit --amend 2  |--> 3 unwanted changes
+  1619443 HEAD@{6}: commit (amend): rebornlinux: upload script folder for the commit above:  # commit --amend 3 -+
+  ed1c7b7 HEAD@{7}: commit: rebornlinux: upload script folder for the commit above:          # the commit to reset to
+  95ef9c6 HEAD@{8}: commit: rebornlinux: add middle docker image layer for separate rebornlinux toolchain && \
+  8f6537b HEAD@{9}: clone: from git@gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git
+
+$ git reset --soft ed1c7b7                                          # revert staged(index) to the state of ed1c7b7
+$ git diff --staged                                                 # check the revert result, the multiple amend changes are back to index
+  diff --git a/Dockerfile.base b/Dockerfile.base
+  index c5b5164..450153d 100644
+  --- a/Dockerfile.base
+  +++ b/Dockerfile.base
+  @@ -12,7 +12,7 @@ ARG ARTIFACTORY_REBORN=https://$SITE/artifactory/rebornlinux-generic-local
+   RUN apk update && \
+       apk upgrade && \
+       apk add doas bash gcompat wget curl less xz grep tini && \
+  -    apk add lua-aports pigz gcc-gnat   # from alpine build-base
+  +    apk add lua-aports pigz         # from alpine build-base: gcc-gnat
+  ...
+
+# check the commit tree after the fixing:
+$ git log --graph --oneline --decorate
+  * 8e646a6 rebornlinux: fix types and unused comments, remove alpine version hardcode     # the ammend changesets are updated into new commit
+  * ed1c7b7 rebornlinux: upload script folder for the commit above...                      # the commit under review 2
+  * 95ef9c6 rebornlinux: add middle docker image layer for separate...                     # the commit under review 1
+  * 8f6537b vscode: update configs
+  ...
+
+# directly push it into the repo -> succeed
+$ git push
+  Counting objects: 13, done.
+  Delta compression using up to 36 threads.
+  Compressing objects: 100% (7/7), done.
+  Writing objects: 100% (7/7), 669 bytes | 0 bytes/s, done.
+  Total 7 (delta 5), reused 0 (delta 0)
+  remote:
+  remote: View merge request for 5-update-middle-layer-toolchain-docker-image-as-reliance-for-devkit:
+  remote:   https://gitlabe1.ext.net.nokia.com/rebornlinux/devkit/-/merge_requests/7
+  remote:
+  To git@gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git
+     ed1c7b7..8e646a6  5-update-middle-layer-toolchain-docker-image-as-reliance-for-devkit -> 5-update-middle-layer-toolchain-docker-image-as-reliance-for-devkit
+  

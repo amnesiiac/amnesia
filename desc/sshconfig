@@ -1,0 +1,35 @@
+(1) generate ssh key using ssh-keygen
+-------------------------------------
+  $ ssh-keygen                    # interactively generated ssh key
+  ...
+
+
+(2) check the key permissions
+-----------------------------
+  $ ls -l ~/.ssh
+  total 24
+  -rw-rw-r-- 1 metung metung  397 Sep 13  2022 authorized_keys
+  -rw------- 1 metung metung 1675 Sep  6  2022 id_rsa           # private key: decryption + signature
+  -rw------- 1 metung metung  397 Sep  6  2022 id_rsa.pub       # public key: encryption + signature verification
+  -rw-r--r-- 1 metung metung 8903 Aug 21 10:42 known_hosts      # the file contains host/public key pairs connected once
+
+  $ ls -l -d ~/.ssh
+  drwx------ 2 metung metung 4096 Mar 13 08:37 /home/metung/.ssh
+
+
+(3) set the right permission for sshkey 
+---------------------------------------
+  $ chmod 600 ~/.ssh/id_rsa         # 42:  w/r for private key by user
+  $ chmod 600 ~/.ssh/id_rsa.pub     # 42:  w/r for public key by user
+  $ chmod 700 ~/.ssh                # 421: w/r/x for ssh dir by user
+
+
+(x) what is the fingerprint of ssh
+----------------------------------
+ref: https://superuser.com/a/422008
+
+
+(x) difference between clone through ssh and https
+--------------------------------------------------
+  $ git clone git@host:username/repository.git       # clone by ssh: add public key to repo, no credentials sent over net
+  $ git clone https://github.com/username/repo.git   # clone by https: prompt you for username & passwd

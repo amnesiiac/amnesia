@@ -1,0 +1,5 @@
+# ignore all .o files recursively 
+/**/*.o
+
+# ignore binary out file
+out

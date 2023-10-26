@@ -1,0 +1,41 @@
+some useful commands to config git
+==================================
+
+config git proto
+----------------
+# using https instead of git
+  $ git config --global url."https://github.com/".insteadOf git@github.com:
+  $ git config --global url."https://".insteadOf git://
+
+# using git instead of https
+  $ git config --global url."git@github.com:".insteadOf https://github.com/
+  $ git config --global url."git://".insteadOf https://
+
+reborn linux gitlab ci/cd, config git to using CI_JOB_TOKEN for git push/clone
+--------------------------------------------------------------------------
+# rebornlinux/aports/.gitlab.ci.yml
+  default:                                                                                               # global job settings
+    image:
+      name: rebornlinux-docker-local.artifactory-blr1.int.net.nokia.com/rebornlinux/toolchain:latest     # default ci/cd image
+      entrypoint: [""]
+    before_script:                                                                                       # git config url using CI_JOB_TOKEN
+      - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlabe1.ext.net.nokia.com".insteadOf "https://gitlabe1.ext.net.nokia.com"
+# if not using CI_JOB_TOKEN, when executing git operations inside job script, will raise following error:
+  fatal: could not read Username for 'https://gitlabe1.ext.net.nokia.com': No such device or address
+
+issue: git: fatal: detected dubious ownership
+---------------------------------------------
+# rebornlinux/aports/.gitlab.ci.yml/ -> build.sh when running jobs inside gitlab runner based on the image inside rebornlinux/devkit repo:
+  the above error occurs, the root cause:
+  inside dockerfile, a user named reborn is setup, but when container startup, the startup user is root, when executing
+  ...
+  Getting source from Git repository 
+  00:21 Fetching changes with git depth set to 500...
+  Initialized empty Git repository in /builds/rebornlinux/aports/.git/
+  ...
+  fatal: detected dubious ownership in repository at '/builds/rebornlinux/aports'
+  To add an exception for this directory, call:
+  git config --global --add safe.directory /builds/rebornlinux/aports
+# fix
+  add "USER reborn" in end of toolchain
+

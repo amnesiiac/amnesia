@@ -1,0 +1,29 @@
+switch the focus window when using gdb -tui
+-------------------------------------------
+# method-1
+press keys 'ctrl+x; o'   # cycle through windows
+
+
+# method-2
+$ focus next
+$ focus cmd              # to cmd window
+$ focus src              # to src window
+$ focus asm
+$ focus reg
+                    (context switch)
+         10. wakeup the thread in waiting que       7. issue software irq
+┌────────────────────────┐            ┌───────────┐         ┌──────────────┐
+│ user process(blocking) │<----(10)---┤ ksoftirqd │<--(7)---┤ software irq │<---------┐
+└─────────────┬───┬──────┘            └─────┬─────┘         └──────────────┘          |
+              |   |                         |                                         |
+              |   | 2. wait for recv        |                                         |
+1. create sock|   └-----------------┐       |8. get packets from                      |
+    ┌─────────┼─────────────────────┼───────┼─────┐ ringbuffer                        |
+    │┌────────+────────┐       waiting que  |     │                                   |
+    ││socket kernel obj├──┐  ┌─┬─┬─┬+┬───┬─┐|     │                                   |
+    │└────────┬────────┘  └─>│ │ │ │ │   │ │|     │                                   |
+    │         |              └─┴─┴─┴─┴───┴─┘|     │                6. handling hw irq |
+    │socket recv que                        |     │                                   |(6)
+    │┌─┬─┬─┬─┬+──┬─┐     ┌───┐        ┌─────+────┐│ ┌─────┐  ┌──────────────┐      ┌──┴──┐
+    ││ │ │ │ │...│ │<----┤skb│<-------┤ringbuffer├┼─┤  ?  ├──┤ bridge/memory├──────┤ cpu │
+    │└─┴─┴─┴─┴───┴─┘     └───┘        └─────+────┘│ └─────┘  │  controller  │      └──+──┘

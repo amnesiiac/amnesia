@@ -1,0 +1,158 @@
+usages of git rebase
+====================
+ref: git rebase --help for details
+
+situation1: topic and master branch has no common commit
+--------------------------------------------------------
+Assume the following history exists and the current branch is "topic":
+
+              A---B---C topic             # topic: the private branch maintain by your team
+             /
+        D---E---F---G master              # master means the branch from public repo upstream code
+
+running the following cmd:
+
+$ git rebase master
+$ git rebase master topic                 # git checkout topic && git rebase master
+
+would be:
+
+                      A'--B'--C' topic
+                     /
+        D---E---F---G master
+
+NOTE: The latter form is just a short-hand of git checkout topic followed by git rebase master.
+When rebase exits topic will remain the checked-out branch.
+
+
+situation2: topic and master branch has no common commit
+--------------------------------------------------------
+running the following cmd on the following history (A and A' are the same set of code changes with diff commit msg)
+
+$ git rebase master
+
+              A---B---C topic
+             /
+        D---E---A'---F master
+
+will result in:
+
+                       B'---C' topic
+                      /
+        D---E---A'---F master
+
+Here is how you would transplant a topic branch based on one branch to another, 
+to pretend that you forked the topic branch from the latter branch, using rebase --onto.
+
+
+code in action 
+--------------
+ref: rebornlinux/docs/readme -> how to rebase code from upstream
+
+
+used for forcibly update the commit message of commits already in remote repo
+-----------------------------------------------------------------------------
+# download main branch, and check the commit log
+$ git clone git@gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git
+$ git log --oneline --graph --decorate
+  * 96b5a55 (HEAD, origin/main, origin/HEAD, main) rebornlinux devkit: update devkit docker images...
+  * cbe16d2 rebornlinux: delete unused GOPATH env variables from devkit/toolchain...
+  * 58deb88 rebornlinux: fix typos / execution ownerships introduced by adding toolchain layer...
+  * 8e646a6 rebornlinux: fix types and unused comments, remove alpine version hardcode..
+  * ed1c7b7 rebornlinux: upload script folder for the commit above:        add middle docker image layer...
+  * 95ef9c6 rebornlinux: add middle docker image layer for separate rebornlinux toolchain       add script...
+  * 8f6537b vscode: update configs
+  * 9426d3d add full diff and find for kernel compiling
+  * ab615b1 install gitlab-release-cli
+  ...
+
+# the rebornlinux related commit msg is too long and bad formatted:
+
+$ git rebase -i HEAD~5
+  <remove all the lines inside editor>
+  Nothing to do
+
+$ git rebase -i HEAD~5
+  pick 95ef9c6 rebornlinux: add middle docker image layer for separate rebornlinux toolchain && \     add script...
+  pick ed1c7b7 rebornlinux: upload script folder for the commit above:              add middle docker image...
+  pick 8e646a6 rebornlinux: fix types and unused comments, remove alpine version hardcode.
+  pick 58deb88 rebornlinux: fix typos / execution ownerships introduced by adding toolchain layer...
+  pick cbe16d2 rebornlinux: delete unused GOPATH env variables from devkit/toolchain.      switch user as root...
+  pick 96b5a55 rebornlinux devkit: update devkit docker images, from mutlistage build,     make all layes of...
+  
+  # Rebase 8f6537b..96b5a55 onto 8f6537b
+  # Commands:
+  #  p, pick = use commit
+  #  r, reword = use commit, but edit the commit message
+  #  e, edit = use commit, but stop for amending
+  #  s, squash = use commit, but meld into previous commit
+  #  f, fixup = like "squash", but discard this commit's log message
+  #  x, exec = run command (the rest of the line) using shell
+  #
+  # These lines can be re-ordered; they are executed from top to bottom.
+  # If you remove a line here THAT COMMIT WILL BE LOST.
+  # However, if you remove everything, the rebase will be aborted.
+  # Note that empty commits are commented out
+
+  <edit content inside the editor as following>
+
+  reword 95ef9c6 rebornlinux: add middle docker image layer for separate rebornlinux toolchain && \     add script...
+  reword ed1c7b7 rebornlinux: upload script folder for the commit above:              add middle docker image...
+  reword 8e646a6 rebornlinux: fix types and unused comments, remove alpine version hardcode.
+  reword 58deb88 rebornlinux: fix typos / execution ownerships introduced by adding toolchain layer...
+  reword cbe16d2 rebornlinux: delete unused GOPATH env variables from devkit/toolchain.      switch user as root...
+  reword 96b5a55 rebornlinux devkit: update devkit docker images, from mutlistage build,     make all layes of...
+  
+  # Rebase 8f6537b..96b5a55 onto 8f6537b
+  #
+  # Commands:
+  #  p, pick = use commit
+  #  r, reword = use commit, but edit the commit message
+  #  e, edit = use commit, but stop for amending
+  #  s, squash = use commit, but meld into previous commit
+  #  f, fixup = like "squash", but discard this commit's log message
+  #  x, exec = run command (the rest of the line) using shell
+  #
+  # These lines can be re-ordered; they are executed from top to bottom.
+  # If you remove a line here THAT COMMIT WILL BE LOST.
+  # However, if you remove everything, the rebase will be aborted.
+  # Note that empty commits are commented out
+
+  <for each updated commit, will open a editor for apply changes>
+
+# checking the outgoing commits (the commits are updated above)
+$ git fetch && git log origin/main..
+  8eab19e rebornlinux devkit: delete from scratch clause, keep simplest available env vars.
+  82a6c0d rebornlinux: delete GOPATH env from devkit/toolchain.
+  3e3904b rebornlinux: fix typos / execution ownerships introduced by adding toolchain layer.
+  380b557 rebornlinux: fix typos and unused comments, remove alpine version hardcode.
+  7099cb2 rebornlinux: upload devkit ci/cd script folder.
+  83c44d1 rebornlinux: add toolchain as middle layer & add script for devkit ci/cd.
+
+# check local & remote branches
+$ git branch --list -a
+  * main
+    remotes/origin/HEAD -> origin/main
+    remotes/origin/main
+
+# forcibly push cur branch commit to remote branch
+$ try: git push --force ${remotename} ${branchname}, but failed
+$ git push -f origin main
+  Counting objects: 34, done.
+  Delta compression using up to 36 threads.
+  Compressing objects: 100% (16/16), done.
+  Writing objects: 100% (29/29), 6.92 KiB | 0 bytes/s, done.
+  Total 29 (delta 16), reused 19 (delta 12)
+  remote: GitLab: You are not allowed to force push code to a protected branch on this project.To git@gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git
+   ! [remote rejected] main -> main (pre-receive hook declined)
+  error: failed to push some refs to 'git@gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git'
+
+# open the permission inside gitlab page settings && push -f again
+$ git push -f origin main
+  Counting objects: 34, done.
+  Delta compression using up to 36 threads.
+  Compressing objects: 100% (16/16), done.
+  Writing objects: 100% (29/29), 6.92 KiB | 0 bytes/s, done.
+  Total 29 (delta 16), reused 19 (delta 12)
+  To git@gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git
+   + 96b5a55...8eab19e main -> main (forced update)
