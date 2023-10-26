@@ -1,0 +1,55 @@
+the steps and traps to push local project to github repo
+--------------------------------------------------------
+$ git init                                                             # create a new proj in github site & commit changes into local repo
+$ git add -A
+$ git commit
+
+$ git branch                                                           # the branch will appear after first commit done
+  * main
+
+$ git remote add origin https://github.com/twistfatezz/amnesia.git     # config remote name & url
+
+$ git remote -v                                                        # check
+  origin  https://github.com/twistfatezz/amnesia.git (fetch)
+  origin  https://github.com/twistfatezz/amnesia.git (push)
+
+$ git push origin main                                                 # user/passwd needed
+  Username for 'https://github.com':
+  Password for 'https://twistfatezz@github.com':
+
+$ git remote remove origin                                             # remove https config
+$ git remote add origin git@github.com:twistfatezz/amnesia.git         # use git/ssh
+$ git remote -v                                                        # check
+  origin  git@github.com:twistfatezz/amnesia.git (fetch)
+  origin  git@github.com:twistfatezz/amnesia.git (push)
+
+$ git push -u origin main                                              # try push first commit
+  ssh: connect to host github.com port 22: Connection timed out
+  fatal: Could not read from remote repository.
+  Please make sure you have the correct access rights
+
+$ vim ~/.ssh/config                                                    # the default port 22 for ssh to github might be blocked
+  Host github.com
+   Hostname ssh.github.com
+   Port 443
+$ ssh -T git@github.com
+  Bad owner or permissions on /home/metung/.ssh/config
+$ ls -l ~/.ssh/config
+  -rw-rw-r-- 1 metung metung 51 Oct 26 16:53 /home/metung/.ssh/config
+
+$ chmod 700 ~/.ssh && chmod 600 ~/.ssh/*                               # change permission
+$ ssh -T git@github.com
+  Warning: Permanently added '[ssh.github.com]:443,[20.207.73.83]:443' (ECDSA) to the list of known hosts.
+  Hi twistfatezz! You've successfully authenticated, but GitHub does not provide shell access.
+
+$ git push -u origin main                                              # try push again
+  Warning: Permanently added the ECDSA host key for IP address '[20.205.243.160]:443' to the list of known hosts.
+  Counting objects: 28, done.
+  Delta compression using up to 36 threads.
+  Compressing objects: 100% (28/28), done.
+  Writing objects: 100% (28/28), 37.34 KiB | 0 bytes/s, done.
+  Total 28 (delta 0), reused 0 (delta 0)
+  remote: To git@github.com:twistfatezz/amnesia.git
+   * [new branch]      main -> main
+  Branch main set up to track remote branch main from origin.
+

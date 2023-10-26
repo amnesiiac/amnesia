@@ -32,7 +32,7 @@ MenuItem* initdata(){
                      {"build texlive xelatex zh#docker run --rm -i -v $PWD:/data latex xelatex ${zh}.tex#"}}},
         {"gnu +", {{"gnu tools manuals#https://www.gnu.org/manual/#"}}},
         {"revision control +", {
-            {"git +", {{"git init +", {{"init git repo in current dir#git init#"}, 
+            {"git +", {{"git init +", {{"*init git repo in current dir#git init#gitinit"},
                                        {"del git repo in current dir#rm -rf .git#"}}},
                        {"git config +", {{"list all config#git config --list#"}, 
                                          {"list system level config#git config --list --system#"}, 
