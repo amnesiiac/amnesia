@@ -32,3 +32,5 @@ $ cd ./test && docekr build -t hellotest .           # build for the second time
   Successfully built e072c2e5e550
   Successfully tagged hellotest:latest
 
+$ skip some unrelavant file/dirs using '.dockerignore' file
+  ref: https://docs.docker.com/engine/reference/builder/#dockerignore-file
