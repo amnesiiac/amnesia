@@ -66,9 +66,9 @@ $ git log --oneline --graph --decorate
   * ab615b1 install gitlab-release-cli
   ...
 
-# the rebornlinux related commit msg is too long and bad formatted:
+# the rebornlinux related commit msg is too long and bad formatted, so we take the following steps:
 
-$ git rebase -i HEAD~5
+$ git rebase -i HEAD~5                  #  dry-run
   <remove all the lines inside editor>
   Nothing to do
 
