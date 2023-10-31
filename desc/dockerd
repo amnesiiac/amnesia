@@ -1,0 +1,85 @@
+an exmaple dockerd config for using self-hosted registry on jfrog
+-----------------------------------------------------------------
+$ cat /etc/docker/daemon.json   # check the docker daemon settings
+  {
+      "insecure-registries": [ "http://135.251.200.81:1024" ],
+      "debug" : true,
+      "data-root":"/repo1/docker_root",
+      "registry-mirrors": [
+          "https://docker-registry-remote.artifactory-espoo1.int.net.nokia.com",
+          "https://docker-registry-remote.artifactory-espoo2.int.net.nokia.com",
+          "https://registry.docker-cn.com"
+      ]
+  }
+
+$ docker info                   # check the system-wide info
+  client:
+   Context:    default
+   Debug Mode: false
+   Plugins:
+    app: Docker App (Docker Inc., v0.9.1-beta3)
+    buildx: Docker Buildx (Docker Inc., v0.9.1-docker)
+    scan: Docker Scan (Docker Inc., v0.17.0)
+  
+  Server:
+   Containers: 8
+    Running: 8
+    Paused: 0
+    Stopped: 0
+   Images: 162
+   Server Version: 20.10.18
+   Storage Driver: overlay2
+    Backing Filesystem: extfs
+    Supports d_type: true
+    Native Overlay Diff: true
+    userxattr: false
+   Logging Driver: json-file
+   Cgroup Driver: cgroupfs
+   Cgroup Version: 1
+   Plugins:
+    Volume: local
+    Network: bridge host ipvlan macvlan null overlay
+    Log: awslogs fluentd gcplogs gelf journald json-file local logentries splunk syslog
+   Swarm: inactive
+   Runtimes: io.containerd.runc.v2 io.containerd.runtime.v1.linux runc
+   Default Runtime: runc
+   Init Binary: docker-init
+   containerd version: 9cd3357b7fd7218e4aec3eae239db1f68a5a6ec6
+   runc version: v1.1.4-0-g5fd4c4d
+   init version: de40ad0
+   Security Options:
+    seccomp
+     Profile: default
+   Kernel Version: 5.4.207-1.el7.elrepo.x86_64
+   Operating System: CentOS Linux 7 (Core)
+   OSType: linux
+   Architecture: x86_64
+   CPUs: 36
+   Total Memory: 102.2GiB
+   Name: spine.novalocal
+   ID: 6MBI:ZQXR:KCRM:HS57:BR5Z:WOM3:RBFT:NREN:ZM37:AIEM:DI5M:OLBP
+   Docker Root Dir: /repo1/docker_root
+   Debug Mode: true
+    File Descriptors: 83
+    Goroutines: 79
+    System Time: 2023-10-31T21:40:29.058388591+08:00
+    EventsListeners: 0
+   HTTP Proxy: http://10.158.100.9:8080/  <----------------------------------- local config for http/https proxy
+   HTTPS Proxy: http://10.158.100.9:8080/
+   No Proxy: localhost,127.0.0.1,.example.com
+   Registry: https://index.docker.io/v1/
+   Labels:
+   Experimental: false
+   Insecure Registries:
+    135.251.200.81:1024
+    127.0.0.0/8
+   Registry Mirrors:  <------------------------------------------------------- see the registry mirrors configured
+    https://docker-registry-remote.artifactory-espoo1.int.net.nokia.com/
+    https://docker-registry-remote.artifactory-espoo2.int.net.nokia.com/
+    https://registry.docker-cn.com/
+   Live Restore Enabled: false
+
+
+options that can be configured by /etc/docker/daemon.json
+---------------------------------------------------------
+ref: https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file

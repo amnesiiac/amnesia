@@ -68,7 +68,8 @@ $ git log --oneline --graph --decorate
 
 # the rebornlinux related commit msg is too long and bad formatted, so we take the following steps:
 
-$ git rebase -i HEAD~5                  #  dry-run
+$ git clone git@gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git  # init proj, with no local changes or outgoing changes
+$ git rebase -i HEAD~5                                             #  dry-run
   <remove all the lines inside editor>
   Nothing to do
 

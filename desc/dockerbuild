@@ -1,0 +1,34 @@
+problems when using docker build
+--------------------------------
+$ ls -lh                                             # list all the file/dir under current dir
+  total 56K
+  drwxrwxr-x 69 metung metung 4.0K Sep  8 10:20 devtools
+  -rw-rw-r--  1 metung metung   24 Oct 31 20:36 Dockerfile  <--- the dockerfile for the first build
+  drwxrwxr-x  3 metung metung 4.0K Aug 28 09:42 git
+  drwxrwxrwx 98 metung metung 4.0K Oct 27 22:25 host_workdir
+  drwxrwxr-x  7 metung metung 4.0K Nov 21  2022 hue
+  drwxrwxr-x  2 metung metung 4.0K Oct 16 10:09 leak
+  drwxrwxr-x  2 metung metung 4.0K Oct 23 17:20 portmanager
+  drwxrwxr-x  5 metung metung 4.0K Oct 31 17:19 reborn
+  drwxrwxr-x 13 metung metung 4.0K Apr  8  2023 robot
+  drwxrwxr-x 10 metung metung 4.0K Feb 26  2023 sw
+  drwxrwxr-x  2 metung metung 4.0K Oct 31 20:35 test        <--- the dir contains the same dockerfile in second build
+  -rw-rw-r--  1 metung metung 2.5K Aug 17 09:42 values_rstp_outband.yaml
+  -rw-rw-r--  1 metung metung  898 Sep  4 13:51 values.yaml
+  drwxrwxr-x  3 metung metung 4.0K Oct 27 23:39 vm_auto
+
+$ cat Dockerfile                                     # content of it
+  ROM docker:23.0.3-dind
+
+$ docker build -t hellotest .                        # build for the first time, problematic: will send extremely large context
+  Sending build context to Docker daemon   1.77GB
+  ...
+  ^C (interrupted)
+
+$ cd ./test && docekr build -t hellotest .           # build for the second time, success
+  Sending build context to Docker daemon  2.048kB
+  Step 1/1 : FROM docker:23.0.3-dind
+   ---> e072c2e5e550
+  Successfully built e072c2e5e550
+  Successfully tagged hellotest:latest
+
