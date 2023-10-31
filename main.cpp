@@ -75,6 +75,15 @@ inline string get_file(string str){
     return "";
 }
 
+inline string trunc_menu_header(string headstr){
+    if(headstr.length() > MAX_MENUSTRLEN){
+        return headstr.substr(0, MAX_MENUSTRLEN);
+    }
+    else{
+        return headstr;
+    }
+}
+
 // dump "layer -> menus" info to result (only available when memu layer changes)
 void getlayout(map<int, vector<string>> &res, MenuItem *ptr, int layer, int limit,
                vector<int> &highlight){
@@ -118,6 +127,8 @@ void print_menu(WINDOW *menu_win, int x, int y, int active_layer, vector<int> &h
     for(int i = 0; i < res[active_layer].size(); ++i){                                                 // for each item in menu_win
         headstr = get_head(res[active_layer][i]);
         trunc_headstr = headstr.length()>MAX_MENUSTRLEN? headstr.substr(0, MAX_MENUSTRLEN) : headstr;
+        trunc_headstr = trunc_menu_header(headstr);
+        // trunc_headstr = headstr.length()>MAX_MENUSTRLEN? headstr.substr(0, MAX_MENUSTRLEN) : headstr;
         if(highlight[active_layer] == i){                                                              // active item -> highlight
             wattron(menu_win, A_REVERSE);
             mvwprintw(menu_win, y, x, "%s", trunc_headstr.c_str());
@@ -136,8 +147,8 @@ void print_menu(WINDOW *menu_win, int x, int y, int active_layer, vector<int> &h
 // get max menu name width for each layer
 int get_menu_width(vector<string> &menu){
     int len=-1;
-    for(auto item:menu){
-        len = max(len, (int)get_head(item).length());
+    for(string item : menu){
+        len = max(len, (int)trunc_menu_header(get_head(item)).length());
     }
     return len;
 }
