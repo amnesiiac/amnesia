@@ -2,10 +2,12 @@ what is a tracking branch
 -------------------------
 ref: https://stackoverflow.com/a/4693780
 
+
 setup other tracking branch not existed in local
 ------------------------------------------------
 $ git checkout -b ${branch} ${remote}/${branch}    # method1
 $ git checkout --track ${remote}/${branch}         # method2 git>1.6.2
+
 
 list remote tracking branches
 -----------------------------
@@ -13,7 +15,75 @@ $ git branch --list -r
   origin/HEAD -> origin/master
   origin/master
 
+
 del remote branches
 -------------------
 $ git branch -d -r ${origin}/${branch_to_del}      # method1
 $ git push ${origin} -d ${branch_to_del}           # method2
+
+
+rename branches: diff between git branch -m/-M
+----------------------------------------------
+$ git branch                                       # current branch
+  * main
+
+$ git checkout -b hello                            # create a new branch hello
+  Switched to a new branch 'hello'
+
+$ git branch --list                                # list all local branch
+* hello
+  main
+
+$ git branch -m main                               # rename hello to main -> failed
+  fatal: A branch named 'main' already exists.
+
+$ git branch -M main                               # renamem hello to main force -> succeed
+
+$ git branch --list                                # only one branch left
+  * main
+
+
+rename branch: git branch -M ${branch} will force overwrite the target branch if name overlapped
+------------------------------------------------------------------------------------------------
+$ git branch                                         # current branch
+* main
+
+$ git checkout -b hello                              # create a new branch
+  Switched to a new branch 'hello'
+
+$ git branch --list                                  # list branch
+  * hello
+    main
+
+# do some commits on both main and hello branch...
+
+$ git checkout main && git log --oneline             # show main branch commits
+  cfb0d25 mainfile: specific for main branch
+  15cffe2 first commit
+
+$ git checkout hello && git log --oneline            # show hello branch commits
+  3980d70 hellofile: specific for hello branch
+  15cffe2 first commit
+
+$ git log main..hello --oneline                      # show commit in hello not in main
+  3980d70 hellofile: specific for hello branch
+
+$ git log hello..main --oneline                      # show commit in main not in hello
+  cfb0d25 mainfile: specific for main branch
+
+$ git branch --list                                  # list branches
+  * hello
+    main
+
+$ git branch -m main                                 # rename hello to main -> failed
+  fatal: A branch named 'main' already exists.
+
+$ git branch -M main                                 # rename hello to main force -> succeed
+
+$ git branch --list
+* main
+
+$ git log --oneline                                  # the hello branch overwrite the origin main (old are lost)
+3980d70 hellofile: specific for hello branch
+15cffe2 first commit
+

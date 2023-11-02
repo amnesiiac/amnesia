@@ -51,11 +51,11 @@ code example to examine the difference between cidrs: ip/32 and ip/24
   $ ip link add veth1 type veth peer name veth2                              # setup veth
   $ ip link set veth1 netns net1                                             # setup veth into netns
   $ ip link set veth2 netns net2
-  $ ip netns exec net1 ifconfig veth1 10.0.15.1/24 up                        # setup ip/mask -> failed
+  $ ip netns exec net1 ifconfig veth1 10.0.15.1/24 up                        # setup ip/mask for net1/veth1 -> failed
   ifconfig: bad address '10.0.15.1/24'
-  $ ip netns exec net1 ifconfig veth1 10.0.15.1 netmask 255.255.255.0 up     # try another format -> success
+  $ ip netns exec net1 ifconfig veth1 10.0.15.1 netmask 255.255.255.0 up     # try another format to setup ip/mask for net1/veth1 -> succeed
   $ ip netns exec net2 ifconfig veth2 10.0.15.2/24 up                        # failed
-  $ ip netns exec net2 ifconfig veth2 10.0.15.2 netmask 255.255.255.0 up     # success
+  $ ip netns exec net2 ifconfig veth2 10.0.15.2 netmask 255.255.255.0 up     # succeed
   $ ip netns exec net1 ping 10.0.15.2                                        # exec cmd in netns net1 -> ping veth2 from veth1
   PING 10.0.15.2 (10.0.15.2): 56 data bytes
   64 bytes from 10.0.15.2: seq=0 ttl=64 time=0.318 ms
@@ -110,6 +110,6 @@ code example to examine the difference between cidrs: ip/32 and ip/24
   [1]+  Done                       sleep 15 && ip netns exec net1 ifconfig veth1 10.0.15.1 netmask 255.255.255.0 up
 
 # conclusion
-ref: https://unix.stackexchange.com/a/558427  -> check for details
-Linux implicitly adds a route when an address with a netmask is set.  -> that's why ip/24 can ping each other
-When the netmask is /32 there can't be a route added this way (or actually there still is: a local scope route.
+  ref: https://unix.stackexchange.com/a/558427  -> check for details
+  Linux implicitly adds a route when an address with a netmask is set.  -> that's why ip/24 can ping each other
+  When the netmask is /32 there can't be a route added this way (or actually there still is: a local scope route.
