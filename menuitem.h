@@ -30,7 +30,10 @@ MenuItem* initdata(){
                                          {"start melon jekyll server#"}}}}},
         {"latex +", {{"build texlive pdflatex en#docker run --rm -i -v $PWD:/data latex pdflatex ${en}.tex#"},
                      {"build texlive xelatex zh#docker run --rm -i -v $PWD:/data latex xelatex ${zh}.tex#"}}},
-        {"gnu +", {{"gnu tools manuals#https://www.gnu.org/manual/#"}}},
+        {"gnu +", {{"gnu tools manuals#https://www.gnu.org/manual/#"},
+                   {"sed +", {"get content within line range of [start,end] from file#sed -n '${start},${end}p' ${file}#"},
+                             {"get content within line range of [start,start+incr] from file#sed -n '${start},+${incr}p' ${file}#"}},
+                   {"awk +"}}},
         {"revision control +", {
             {"git +", {{"git init +", {{"*init git repo in current dir#git init#gitinit"},
                                        {"del git repo in current dir#rm -rf .git#"}}},
