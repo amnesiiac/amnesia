@@ -10,7 +10,7 @@ struct MenuItem{
 // load data into menu data structure => todo: move the data structure to a standalone file
 MenuItem* initdata(){
     // Create the menu structure
-    MenuItem *menu_ptr = new MenuItem;;
+    MenuItem *menu_ptr = new MenuItem;
     menu_ptr->name = "Main Menu";
     menu_ptr->submenu = {
         {"mac +", {{"system integrity protection(SIP) +", {{"check SIP status#csrutil status#test"},
@@ -25,14 +25,14 @@ MenuItem* initdata(){
         {"transhell#docker run --rm -it transhell -shell#"},
         {"blog +", {{"twistefatezzz +", {{"edit twistfatezzz blog#"},
                                          {"start twistfatezzz jekyll server#"}}},
-                    {"booming melon +", {{"edit melon blog dockerfile#nvim /User/mac/paper/Dockerfile#"},
-                                         {"edit melon blog#nvim /Users/mac/paper/blog/#"},
-                                         {"start melon jekyll server#"}}}}},
+                    {"melon +", {{"edit melon blog dockerfile#nvim /User/mac/paper/Dockerfile#"},
+                                 {"edit melon blog#nvim /Users/mac/paper/blog/#"},
+                                 {"start melon jekyll server#docker run -it --rm -p 4000:4000 -w=/paper -v /Users/mac/paper/blog/:/paper -h melon blog bundle exec jekyll serve --host 0.0.0.0#"}}}}},
         {"latex +", {{"build texlive pdflatex en#docker run --rm -i -v $PWD:/data latex pdflatex ${en}.tex#"},
                      {"build texlive xelatex zh#docker run --rm -i -v $PWD:/data latex xelatex ${zh}.tex#"}}},
         {"gnu +", {{"gnu tools manuals#https://www.gnu.org/manual/#"},
-                   {"sed +", {"get content within line range of [start,end] from file#sed -n '${start},${end}p' ${file}#"},
-                             {"get content within line range of [start,start+incr] from file#sed -n '${start},+${incr}p' ${file}#"}},
+                   {"sed +", {{"get content within line range of [start,end] from file#sed -n '${start},${end}p' ${file}#"},
+                              {"get content within line range of [start,start+incr] from file#sed -n '${start},+${incr}p' ${file}#"}}},
                    {"awk +"}}},
         {"revision control +", {
             {"git +", {{"git init +", {{"*init git repo in current dir#git init#gitinit"},
