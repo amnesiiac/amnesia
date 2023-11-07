@@ -1,0 +1,78 @@
+gitlab-runner installation
+--------------------------
+
+
+
+using docker command inside .gitlab-ci.yml: gitlab-runner with shell executor
+-----------------------------------------------------------------------------
+ref: https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#enable-docker-commands-in-your-cicd-jobs
+
+
+1 install gitlab-runner
+
+2 register runner to the project (only owner of the group can view/tag the runners, pass tokens to runner)
+  $ sudo gitlab-runner register (interactively register a runner)
+  descriptions: shell executor runner
+  url: https://gitlabe1.ext.net.nokia.com/
+  tag: shell-generic
+  token: can be found at gitlab GUI page: 'ci/cd -> build -> runner' or 'settings -> ci/cd -> runners'
+
+3 check the available runners configured for project/group in:
+  inside project/group -> settings -> ci/cd -> runners -> expand  
+
+4 add sensitive data as env variables inside gitlab project page
+  inside project -> settings -> ci/cd -> variables -> expand
+  check the variable state: protected(x), masked(x).
+  
+  about the protected & masked:
+  protected: only exposed to protected branches or tags. will not exposed branch/tag without protection.
+             one might need to protect it by going to settings > repository > protected branch.
+  masked: hidden in job logs. must match masking requirements.
+
+  DOCKER_AUTH_CONFIG:
+  $ docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD  # after login, will create a auth key in $HOME
+  # copy the following config.json to another machine, will allow direct access to the same docker account
+  ```~/.docker/config.json
+  {
+  	"auths": {
+  		"rebornlinux-docker-local.artifactory-blr1.int.net.nokia.com": {
+  			"auth": "bWV0dW5nOkpiM3I9ZWZh"
+  		}
+  	}
+  }
+  ```
+
+5 config docker daemon on the server that running gitlab-runner (the self-maintained docker registry)
+  ```/etc/docker/daemon.json
+  {
+    incecure-registries": [ "http://135.251.200.81:1024" ],
+      "debug" : true,
+      "data-root":"/repo1/docker_root",
+      "registry-mirrors": [
+             "https://docker-registry-remote.artifactory-espoo1.int.net.nokia.com",
+             "https://docker-registry-remote.artifactory-espoo2.int.net.nokia.com",
+             "https://registry.docker-cn.com"
+     ]
+  }
+  ```
+
+6 edit .gitlab-ci.yml like:
+  ```.gitlab-ci.yml
+  stages:
+    - release
+  
+  release:
+    stage: release
+    rules:                                                                    # only trigger stage when changes on gitlab-ci
+      - changes:
+        - .gitlab-ci.yml
+    before_script:
+      - mkdir -p $HOME/.docker                                                # setup config.json for non-interactive docker login
+      - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json                  # for docker login without with user/passwd 
+      # - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD  # login with user/passwd (env variable set in gitlab ci/cd)
+      - docker info                                                           # test docker cmd
+    script:
+      - make toolchain
+    tags:
+      - shell-generic                                                         # assign the tag of runner for jobs to launch
+  ```

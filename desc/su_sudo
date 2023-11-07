@@ -1,0 +1,17 @@
+check whether gitlab-runner can run docker cmd
+----------------------------------------------
+$ sudo usermod -aG docker gitlab-runner     # add user gitlab-runner into docker group
+$ sudo -u gitlab-runner -H docker info      # switch to gitlab-runner with $HOME set as /home/gitlab-runner to run docker info
+  Client:
+   Context:    default
+   Debug Mode: false
+  
+  Server:
+   Containers: 0
+    Running: 0
+    Paused: 0
+    Stopped: 0
+   Images: 43
+   Server Version: 20.10.21
+   Storage Driver: overlay2
+  ...                                       # docker is to the gitlab runner
