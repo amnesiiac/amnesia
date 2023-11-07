@@ -56,16 +56,16 @@ set local worktree as certain commit & do some test & reset changesets back to l
 revert the changes made by multiple 'git commit --amend'
 --------------------------------------------------------
 # now we have made serveral changes using 'git commit --amend' to a commit already in merge request review stage:
-$ git log --graph --oneline --decorate                              # list one line commit history
-  * a12169d (HEAD, 5-update-middle-layer-toolchain-docker-image-as-reliance-for-devkit) rebornlinux: upload...  # commit under review 2 + amend changes
-  * 95ef9c6 rebornlinux: add middle docker image layer for separate rebornlinux...                              # commit under review 1
-  * 8f6537b (origin/main) vscode: update configs                    # the origin
+  $ git log --graph --oneline --decorate                                                                          # list one line commit history
+  * a12169d (HEAD, 5-update-middle-layer-toolchain-docker-image-as-reliance-for-devkit) rebornlinux: upload...  # commit under review2 + amend changes
+  * 95ef9c6 rebornlinux: add middle docker image layer for separate rebornlinux...                              # commit under review1
+  * 8f6537b (origin/main) vscode: update configs                                                                # the origin
   * 9426d3d add full diff and find for kernel compiling
   * ab615b1 install gitlab-release-cli
   ...
 
 # now if we want to update the merge request branch, will lead to conflicts, open another merge request & resubmit is not the right way out.
-$ git push
+  $ git push
   To git@gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git
    ! [rejected]        5-update-middle-layer-toolchain-docker-image-as-reliance-for-devkit -> 5-update-middle-layer-toolchain-docker-image-as-reliance-for-devkit (non-fast-forward)
   error: failed to push some refs to 'git@gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git'
@@ -74,18 +74,18 @@ $ git push
   hint: before pushing again.
   hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 
-# the right way to peel out the already amended changes is as follows:
+# the right way to peel out the amended changes is as follows:
 
 # check the git ammend history by:
-$ git log --reflog --oneline --no-walk                              # show reglog based on commits
+  $ git log --reflog --oneline --no-walk                              # show reglog based on commits
   a12169d rebornlinux: upload script folder for the commit above... # changes added by git commit --amend into a12169d
   cffc6a7 rebornlinux: upload script folder for the commit above... # changes added by git commit --amend into a12169d
   1619443 rebornlinux: upload script folder for the commit above... # changes added by git commit --amend into a12169d
   ed1c7b7 rebornlinux: upload script folder for the commit above...                          # commit under review 2
   95ef9c6 rebornlinux: add middle docker image layer for separate rebornlinux toolchain...   # commit under review 1
   8f6537b vscode: update configs
-
-$ git reflog                                                        # show reflog based on changes made to tip of HEAD (local cache)
+  
+  $ git reflog                                                        # show reflog based on changes made to tip of HEAD (local cache)
   8e646a6 HEAD@{0}: commit: rebornlinux: fix types and unused comments, remove alpine version hardcode
   ed1c7b7 HEAD@{1}: reset: moving to ed1c7b7                        # reset 1 -+
   a12169d HEAD@{2}: reset: moving to HEAD@{1}                       # reset 2  |--> done by "git reset --soft ed1c7b7"
@@ -96,9 +96,9 @@ $ git reflog                                                        # show reflo
   ed1c7b7 HEAD@{7}: commit: rebornlinux: upload script folder for the commit above:          # the commit to reset to
   95ef9c6 HEAD@{8}: commit: rebornlinux: add middle docker image layer for separate rebornlinux toolchain && \
   8f6537b HEAD@{9}: clone: from git@gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git
-
-$ git reset --soft ed1c7b7                                          # revert staged(index) to the state of ed1c7b7
-$ git diff --staged                                                 # check the revert result, the multiple amend changes are back to index
+  
+  $ git reset --soft ed1c7b7                                          # revert staged(index) to the state of ed1c7b7
+  $ git diff --staged                                                 # check the revert result, the multiple amend changes are back to index
   diff --git a/Dockerfile.base b/Dockerfile.base
   index c5b5164..450153d 100644
   --- a/Dockerfile.base
@@ -112,7 +112,7 @@ $ git diff --staged                                                 # check the 
   ...
 
 # check the commit tree after the fixing:
-$ git log --graph --oneline --decorate
+  $ git log --graph --oneline --decorate
   * 8e646a6 rebornlinux: fix types and unused comments, remove alpine version hardcode     # the ammend changesets are updated into new commit
   * ed1c7b7 rebornlinux: upload script folder for the commit above...                      # the commit under review 2
   * 95ef9c6 rebornlinux: add middle docker image layer for separate...                     # the commit under review 1
@@ -120,7 +120,7 @@ $ git log --graph --oneline --decorate
   ...
 
 # directly push it into the repo -> succeed
-$ git push
+  $ git push
   Counting objects: 13, done.
   Delta compression using up to 36 threads.
   Compressing objects: 100% (7/7), done.
@@ -132,4 +132,70 @@ $ git push
   remote:
   To git@gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git
      ed1c7b7..8e646a6  5-update-middle-layer-toolchain-docker-image-as-reliance-for-devkit -> 5-update-middle-layer-toolchain-docker-image-as-reliance-for-devkit
+
+
+squash a series of commits pushed to the remote branch preparing for merge request
+----------------------------------------------------------------------------------
+# check the commit history for testing gitlab ci/cd, need to squash all the gitlab ci commits into one
+  $ git log --oneline
+  7c7363e gitlab-ci: enable auto build docker images && upload to docker registry
+  0e36242 gitlab-ci: remote /etc/docker/daemon.json variable
+  3c2c557 gitlab-ci: update docker auth & docker mirror
+  1b15890 gitlab-ci: check for docker login
+  33ea28e gitlab-ci: add a shell executor for gitlabci & test for using docker cmd
+  5ed4a68 gitlab-ci: test abuildah
+  213deba gitlab-ci: update
+  07abced gitlab-ci: test
+  e8b0339 gitlab-ci: update fix
+  b53ff50 gitlab-ci: fix bugs
+  92c33d7 gitlab-ci: add a fix for typos
+  f0b8104 gitlab-ci: add a fix
+  85a5789 gitlab-ci: add a test
+  3b0541b gitlab-ci: upate ci yaml: enable docker login
+  761b5ad gitlab-ci: remove workflow rules
+  968aaa9 gitlab-ci: add tag for select runners to adopt
+  a84aff9 gitlab-ci: test 1.1
+  eea6236 gitlab-ci: add trigger rules for testing ci/cd pipeline
+  258e046 gitlab-ci: fix stage name bugs
+  afb0c81 gitlab-ci: add & test gitlab ci/cd for devkit when tagging
+  8eab19e rebornlinux devkit: delete from scratch clause, keep simplest available env vars.
+  82a6c0d rebornlinux: delete GOPATH env from devkit/toolchain.
+  3e3904b rebornlinux: fix typos / execution ownerships introduced by adding toolchain layer.
+  380b557 rebornlinux: fix typos and unused comments, remove alpine version hardcode.
+  ...
+
+  $ git reset --soft 8eab19e      # reset all changes in scope of [latest,8eab19e) into index
   
+  $ git log --oneline
+  8eab19e rebornlinux devkit: delete from scratch clause, keep simplest available env vars.
+  82a6c0d rebornlinux: delete GOPATH env from devkit/toolchain.
+  3e3904b rebornlinux: fix typos / execution ownerships introduced by adding toolchain layer.
+  380b557 rebornlinux: fix typos and unused comments, remove alpine version hardcode.
+  ...
+
+  $ git diff --staged             # check the changes in index
+  $ git diff                      # check the existence of changes in wkdir
+  $ git add -A                    # add changes in wkdir to index
+  $ git commit
+
+  $ git log --graph --oneline
+  * 82a83ee gitlab-ci: enable automatically build & push image when tag changed
+  * 8eab19e rebornlinux devkit: delete from scratch clause, keep simplest available env vars.
+  * 82a6c0d rebornlinux: delete GOPATH env from devkit/toolchain.
+  * 3e3904b rebornlinux: fix typos / execution ownerships introduced by adding toolchain layer.
+  * 380b557 rebornlinux: fix typos and unused comments, remove alpine version hardcode.
+  ...
+  
+  $ git push -f origin 7-add-gitlab-ci-cd-for-devkit-repo      # forcibly push to remote branch (the same branch as remote)
+  Counting objects: 4, done.
+  Delta compression using up to 36 threads.
+  Compressing objects: 100% (4/4), done.
+  Writing objects: 100% (4/4), 663 bytes | 0 bytes/s, done.
+  Total 4 (delta 2), reused 0 (delta 0)
+  remote:
+  remote: View merge request for 7-add-gitlab-ci-cd-for-devkit-repo:
+  remote:   https://gitlabe1.ext.net.nokia.com/rebornlinux/devkit/-/merge_requests/10
+  remote:
+  To gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git
+   + 7c7363e...82a83ee 7-add-gitlab-ci-cd-for-devkit-repo -> 7-add-gitlab-ci-cd-for-devkit-repo (forced update)
+

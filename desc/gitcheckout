@@ -83,7 +83,7 @@ index 7c3f4ba..84f3e31 100644
 --- a/readme.txt
 +++ b/readme.txt
 @@ -18,4 +18,4 @@
-   + namedtuples.py -> 模块定义了训练集、测试集中数据样本的基本格式
+   + namedtuples.py -> this module defined basic format for training data/test data
    ...
 
 $ git status                                            # readme at 5924c7a, local at c5d06c7, a gap existed

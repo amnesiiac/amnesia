@@ -50,11 +50,11 @@ code in action
 ref: rebornlinux/docs/readme -> how to rebase code from upstream
 
 
-used for forcibly update the commit message of commits already in remote repo
------------------------------------------------------------------------------
+forcibly update the commit message of a series of commits already in remote repo
+--------------------------------------------------------------------------------
 # download main branch, and check the commit log
-$ git clone git@gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git
-$ git log --oneline --graph --decorate
+  $ git clone git@gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git
+  $ git log --oneline --graph --decorate
   * 96b5a55 (HEAD, origin/main, origin/HEAD, main) rebornlinux devkit: update devkit docker images...
   * cbe16d2 rebornlinux: delete unused GOPATH env variables from devkit/toolchain...
   * 58deb88 rebornlinux: fix typos / execution ownerships introduced by adding toolchain layer...
@@ -68,19 +68,21 @@ $ git log --oneline --graph --decorate
 
 # the rebornlinux related commit msg is too long and bad formatted, so we take the following steps:
 
-$ git clone git@gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git  # init proj, with no local changes or outgoing changes
-$ git rebase -i HEAD~5                                             #  dry-run
+# dry-run for rebase -i
+  $ git clone git@gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git  # init proj, with no local changes or outgoing changes
+  $ git rebase -i HEAD~5                                             # dry-run
   <remove all the lines inside editor>
   Nothing to do
 
-$ git rebase -i HEAD~5
+# rebase -i to mark the commit to be modified out
+  $ git rebase -i HEAD~5
   pick 95ef9c6 rebornlinux: add middle docker image layer for separate rebornlinux toolchain && \     add script...
   pick ed1c7b7 rebornlinux: upload script folder for the commit above:              add middle docker image...
   pick 8e646a6 rebornlinux: fix types and unused comments, remove alpine version hardcode.
   pick 58deb88 rebornlinux: fix typos / execution ownerships introduced by adding toolchain layer...
   pick cbe16d2 rebornlinux: delete unused GOPATH env variables from devkit/toolchain.      switch user as root...
   pick 96b5a55 rebornlinux devkit: update devkit docker images, from mutlistage build,     make all layes of...
-  
+
   # Rebase 8f6537b..96b5a55 onto 8f6537b
   # Commands:
   #  p, pick = use commit
@@ -122,7 +124,7 @@ $ git rebase -i HEAD~5
   <for each updated commit, will open a editor for apply changes>
 
 # checking the outgoing commits (the commits are updated above)
-$ git fetch && git log origin/main..
+  $ git fetch && git log origin/main..
   8eab19e rebornlinux devkit: delete from scratch clause, keep simplest available env vars.
   82a6c0d rebornlinux: delete GOPATH env from devkit/toolchain.
   3e3904b rebornlinux: fix typos / execution ownerships introduced by adding toolchain layer.
@@ -131,14 +133,14 @@ $ git fetch && git log origin/main..
   83c44d1 rebornlinux: add toolchain as middle layer & add script for devkit ci/cd.
 
 # check local & remote branches
-$ git branch --list -a
+  $ git branch --list -a
   * main
     remotes/origin/HEAD -> origin/main
     remotes/origin/main
 
 # forcibly push cur branch commit to remote branch
-$ try: git push --force ${remotename} ${branchname}, but failed
-$ git push -f origin main
+  $ try: git push --force ${remotename} ${branchname}, but failed
+  $ git push -f origin main
   Counting objects: 34, done.
   Delta compression using up to 36 threads.
   Compressing objects: 100% (16/16), done.
@@ -149,7 +151,7 @@ $ git push -f origin main
   error: failed to push some refs to 'git@gitlabe1.ext.net.nokia.com:rebornlinux/devkit.git'
 
 # open the permission inside gitlab page settings && push -f again
-$ git push -f origin main
+  $ git push -f origin main
   Counting objects: 34, done.
   Delta compression using up to 36 threads.
   Compressing objects: 100% (16/16), done.
