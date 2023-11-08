@@ -1,0 +1,138 @@
+=================================================================================
+gitlab-runner job fails when using yes and pipe for automation of interactive cmd
+=================================================================================
+
+1) background
+-------------
+# given rebornlinux/devkit gitlab ci/cd config file as follows:
+  ```file: rebornlinux/devkit/.gitlab-ci.yml
+  stages:
+    - release
+  
+  release:
+    stage: release
+    rules:                  # run on changes of .gitlab-ci.yml
+      - changes:
+        - .gitlab-ci.yml
+    before_script:
+      - mkdir -p $HOME/.docker
+      - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+    script:
+      - yes | make base
+      - yes | make toolchain
+      - yes | make devkit
+    tags:
+      - shell-generic
+  ```
+
+# given Makefile for using 'make *' to build & push docker image correspondingly:
+  ```file: rebornlinux/devkit/Makefile
+  proxy := http://10.158.100.9:8080
+  repo_tag := $(shell git describe --tags --abbrev=0)
+  site := artifactory-blr1.int.net.nokia.com
+  artifactory := rebornlinux-docker-local.$(site)
+  
+  define docker_push #from,to
+  	@echo Are you sure to push $(1) to $(2) ?                  # confirm for push to jfrog artifactory
+  	@read -p "if not press Ctrl+C -- any key to continue" tmp  # read input from stdin
+  	docker tag $(1) $(2)
+  	docker push $(2)
+  endef
+  
+  default: devkit
+  
+  base: docker_build.base
+  toolchain: docker_build.toolchain
+  devkit: docker_build.devkit
+  
+  docker_build.%:
+  	$(eval DOCKERFILE := $(@:docker_build.%=Dockerfile.%))
+  	$(eval IMG := $(@:docker_build.%=rebornlinux/%))
+  	docker build -f $(DOCKERFILE) -t $(IMG):$(repo_tag) \
+  		--build-arg HTTP_PROXY=$(proxy) --build-arg HTTPS_PROXY=$(proxy) \
+  		--build-arg http_proxy=$(proxy) --build-arg https_proxy=$(proxy) \
+  		.
+  	docker tag $(IMG):$(repo_tag) $(IMG):latest
+  	$(call docker_push,$(IMG):$(repo_tag),$(artifactory)/$(IMG):$(repo_tag))
+  	$(call docker_push,$(IMG):latest,$(artifactory)/$(IMG):latest)
+  ```
+
+
+2) what happened
+----------------
+inside gitlab runner jobs result page, when exec 'yes | make base', 
+returned 'ERROR: Job failed: exit status 1'
+
+
+3) reason
+---------
+the gitlab runner default use 'set -o pipefail' for scripts running on it.
+
+that is, for cmd like 'yes | ${interactive_cmd}' will fail when yes tries 
+to write to stdout but the program whose stdin that stdout is connected to
+is not reading, this will cause an EPIPE signal.
+
+so will cause the ci/cd job fail.
+
+
+4) solution
+-----------
+modify the .gitlab-ci.yml, explcitly set pipefall=false:
+```file: rebornlinux/devkit/.gitlab-ci.yml
+stages:
+  - release
+
+release:
+  stage: release
+  rules:                  # run on changes of .gitlab-ci.yml
+    - changes:
+      - .gitlab-ci.yml
+  before_script:
+    - set +o pipefail
+    - mkdir -p $HOME/.docker
+    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+  script:
+    - yes | make base
+    - yes | make toolchain
+    - yes | make devkit
+  tags:
+    - shell-generic
+```
+
+
+5) confirmation code
+--------------------
+```file: test.sh
+#!/bin/bash
+
+problem() {
+    set +o pipefail
+    yes | true
+    echo "without setting pipefail,   yes | true          returns: $?"
+    set -o pipefail
+    yes | true
+    echo "after setting pipefail,     yes | true          returns: $?"
+}
+
+solution() {
+    set +o pipefail
+    { yes || :; } | true
+    echo "without setting pipefail, { yes || :;} | true   returns: $?"
+    set -o pipefail
+    { yes || :; } | true
+    echo "after setting pipefail,   { yes || :;} | true   returns: $?"
+}
+
+problem
+solution
+
+# without setting pipefail,   yes | true          returns: 0
+# after setting pipefail,     yes | true          returns: 141
+# without setting pipefail, { yes || :;} | true   returns: 0
+# after setting pipefail,   { yes || :;} | true   returns: 0
+
+# analysis:
+# return code 141 means pipefail, 0 for success.
+```
+
+ref: https://stackoverflow.com/questions/49430554/gitlab-runner-in-docker-yes-true-returns-with-exit-1
