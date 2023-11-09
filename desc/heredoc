@@ -1,0 +1,5 @@
+shell heredoc usages
+--------------------
+
+<< usages -> for doc genration
+<<< usages -> for enable input once for interactive prompt
