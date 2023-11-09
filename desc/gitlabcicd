@@ -1,13 +1,10 @@
 gitlab-runner installation
 --------------------------
-
+todo
 
 
 using docker command inside .gitlab-ci.yml: gitlab-runner with shell executor
 -----------------------------------------------------------------------------
-ref: https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#enable-docker-commands-in-your-cicd-jobs
-
-
 1 install gitlab-runner
 
 2 register runner to the project (only owner of the group can view/tag the runners, pass tokens to runner)
@@ -76,3 +73,76 @@ ref: https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#enable-docker-
     tags:
       - shell-generic                                                         # assign the tag of runner for jobs to launch
   ```
+
+using docker command inside .gitlab-ci.yml: gitlab-runner with docker executor
+------------------------------------------------------------------------------
+(1) the dind method
+-------------------
+1 install gitlab-runner
+
+2 register runner to the project
+  $ sudo gitlab-runner register -n                   # (non-interactively register a runner)
+  --url https://gitlabe1.ext.net.nokia.com/
+  --tag docker-generic
+  --executor docker
+  --description "docker executor runner"
+  --docker-image "docker:20.10"
+  --registration-token $GITLAB_REGISTRATION_TOKEN
+  --docker-privileged                                # need privileged mode to enable dind access the host /var/run/docker.sock
+
+3 inside .gitlab-ci.yml for ci/cd pipeline
+  ```
+  services:                                            # use dind as a service (a link to runner's job docker image)
+    - docker:dind
+  
+  docker_build:
+    stage: build
+    image: docker:latest
+    script:
+      - docker build -t example-image:latest .         # use docker cmd in jobs
+  ```
+
+4 drawbacks of dind & solutions
+  the major drawback is dind leading to more complicated caching behavior when a series of jobs need to be done:
+  docker-job1 -> docker-job2 -> docker-job3 ...
+  each runner job gets a new env where previously built layers won't be accessible.
+  
+  a remedy for this: pull the previous version of your image before starting current runner job:
+  use the --cache-from build flag to make the pulled image's layers available as a cache source:
+  ```
+  docker_build:
+    stage: build
+    image: docker:latest
+    script:
+      - docker pull $CI_REGISTRY_IMAGE:latest || true                                       # get the image of previous job
+      - docker build --cache-from $CI_REGISTRY_IMAGE:latest -t $CI_REGISTRY_IMAGE:latest .  # make the pulled image as a cache source
+  ```
+
+
+the /var/run/docker.sock mount method
+-------------------------------------
+1 install gitlab-runner
+
+2 regist gitlab-runner by:
+  $ sudo gitlab-runner register -n                   # (non-interactively register a runner)
+  --url https://gitlabe1.ext.net.nokia.com/
+  --tag docker-generic
+  --executor docker
+  --description "docker executor runner"
+  --docker-image "docker:20.10"
+  --registration-token $GITLAB_REGISTRATION_TOKEN
+  --docker-volumes /var/run/docker.sock:/var/run/docker.sock   # mount the host docker sock into new container 
+
+3 advantages
+  while this approach can lead to higher performance, less configuration, and none of the limitations of dind.
+
+4 limitations
+  malicious jobs might run cmds to make damage to gitlab-runner env:
+  $ docker run -it malicious_image:latest
+  $ docker rm -f $(docker ps -a)
+  the ci/cd jobs might fail if two cocurrent jobs try to startup with the same container name
+
+reference
+---------
+https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#enable-docker-commands-in-your-cicd-jobs
+https://www.howtogeek.com/devops/how-to-build-docker-images-in-a-gitlab-ci-pipeline/
