@@ -1,0 +1,39 @@
+cannot access nerdctl exposed port in bridge mode
+=================================================
+ref: https://github.com/containerd/nerdctl/issues/2133
+
+# steps to check the problem:
+1 config allow incoming traffic to exposed port
+  $ iptables -A INPUT -p tcp --dport ${exposed_port} -j ACCEPT  
+
+2 check the availability of ip:port, but the curl output is fine:
+  $ curl -v ${ip}:${port}
+  * Trying xxx.xxx.xxx.xxx:9080...
+  * Connected to xxx.xxx.xxx.xxx (xxx.xxx.xxx.xxx) port 9080 (#0)
+  > GET /gui/ HTTP/1.1
+  > Host: xxx.xxx.xxx.xxx:9080
+  > User-Agent: curl/7.74.0
+  > Accept: */*
+  > 
+  * Mark bundle as not supporting multiuse
+  < HTTP/1.1 401 Unauthorized
+  < Connection: close
+  < Content-Length: 0
+  < Content-Type: text/html
+  < WWW-Authenticate: Basic realm="uTorrent"
+  < Cache-Control: no-cache
+  < 
+  * Closing connection 0
+
+3 check nat table rules in ip:port numerical format (nat table is responsible for port mappping)
+  $ sudo iptables -L -n -t nat
+  Chain PREROUTING (policy ACCEPT)
+  target             prot opt source               destination         
+  DOCKER             all  --  0.0.0.0/0            0.0.0.0/0            ADDRTYPE match dst-type LOCAL   # docker config
+  CNI-HOSTPORT-DNAT  all  --  0.0.0.0/0            0.0.0.0/0            ADDRTYPE match dst-type LOCAL   # nerdctl config 
+  ...
+
+4 analysis:
+  the output of nat iptable shows that: 
+  due to installation of rule of docker/nerdctl, conflict occurs on rules for PREROUTING
+  a machine with both nerdctl & docker installed might lead to chain rules conflict, which make the port unaccessible
