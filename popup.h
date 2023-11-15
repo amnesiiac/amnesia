@@ -32,7 +32,7 @@ void showcase(WINDOW* menu_win, string filename){
     int ch; 
     int rowcount = 0; int startrow = 0;
     bool stop = false;
-    string desc = "/home/metung/bin/shuttle/desc/" + filename; // absolute path for using as symbolic tool
+    string desc = "/repo1/metung/shuttle/desc/" + filename; // absolute path for using as symbolic tool
     // string desc = string(getrealpath(".")) + "/desc/" + filename;
 
     // show(win_pop, getrealpath(desc.c_str()), rowcount, startrow); // init content & compute rowcount

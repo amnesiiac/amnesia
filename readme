@@ -1,12 +1,8 @@
-# todo: when no test file to show, then no popup window action made, just stay there:
-  detect the first char if *, then popup, or nothing to do
-
-# todo: add help pages for showing how to control the shuttle panel
-  
-# try enable menu open when hitting enter on a menu, but drop back on bash on a final list.
-
-# try clear the search form content before hitting <tab> key to visualize the desc pages.
-
-# the backspace only available on macos in search mode, but failed to work on centos7 bash.
-
-# trys: make the editor like vim or just embeded nvim/vim inside
+1) todo: when no test file to show, then no popup window action made, just stay there:
+   detect the first char if *, then popup, or nothing to do.
+2) todo: add help pages for showing how to control the shuttle panel.
+3) todo: let the popup menu use relative path, so that let the project portable.
+4) try enable menu open when hitting enter on a menu, but drop back on bash on a final list.
+5) try clear the search form content before hitting <tab> key to visualize the desc pages.
+6) the backspace only available on macos in search mode, but failed to work on centos7 bash.
+7) try: make the editor like vim or just embeded nvim/vim inside.
