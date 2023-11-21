@@ -6,3 +6,6 @@
 5) try clear the search form content before hitting <tab> key to visualize the desc pages.
 6) the backspace only available on macos in search mode, but failed to work on centos7 bash.
 7) try: make the editor like vim or just embeded nvim/vim inside.
+
+todo: pipe implementation in c conclusion
+ref: https://medium.com/swlh/understanding-pipes-in-unix-with-a-sample-implementation-9fe110d36412#1569
