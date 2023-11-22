@@ -9,3 +9,6 @@
 
 todo: pipe implementation in c conclusion
 ref: https://medium.com/swlh/understanding-pipes-in-unix-with-a-sample-implementation-9fe110d36412#1569
+
+todo: a visual guide to caching inside gitlab ci/cd
+ref: https://about.gitlab.com/blog/2022/09/12/a-visual-guide-to-gitlab-ci-caching/

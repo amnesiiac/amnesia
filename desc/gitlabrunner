@@ -1,3 +1,8 @@
+==========================
+gitlab-runner basic usages
+==========================
+
+
 gitlab-runner installation
 --------------------------
 todo
@@ -20,7 +25,7 @@ using docker command inside .gitlab-ci.yml: gitlab-runner with shell executor
   descriptions: shell executor runner
   url: https://gitlabe1.ext.net.nokia.com/
   tag: shell-generic
-  token: can be found at gitlab GUI page: 'ci/cd -> build -> runner' or 'settings -> ci/cd -> runners'
+  token: can be found at gitlab GUI page: 'projectdir -> settings -> ci/cd -> runners -> specific runner' or 'project group runners'
 
 3 check the available runners configured for project/group in:
   inside project/group -> settings -> ci/cd -> runners -> expand  
@@ -84,30 +89,30 @@ using docker command inside .gitlab-ci.yml: gitlab-runner with shell executor
 
 using docker command inside .gitlab-ci.yml: gitlab-runner with docker executor
 ------------------------------------------------------------------------------
-(1) the dind method
--------------------
+A the dind method
+-----------------
 1 install gitlab-runner
 
 2 register runner to the project
-  $ sudo gitlab-runner register -n                   # (non-interactively register a runner)
+  $ sudo gitlab-runner register -n                                            # (non-interactively register a runner)
   --url https://gitlabe1.ext.net.nokia.com/
   --tag docker-generic
   --executor docker
   --description "docker executor runner"
   --docker-image "docker:20.10"
   --registration-token $GITLAB_REGISTRATION_TOKEN
-  --docker-privileged                                # need privileged mode to enable dind access the host /var/run/docker.sock
+  --docker-privileged                                                         # need privileged mode to enable dind access the host /var/run/docker.sock
 
 3 inside .gitlab-ci.yml for ci/cd pipeline
   ```
-  services:                                            # use dind as a service (a link to runner's job docker image)
+  services:                                                                   # use dind as a service (a link to runner's job docker image)
     - docker:dind
   
   docker_build:
     stage: build
     image: docker:latest
     script:
-      - docker build -t example-image:latest .         # use docker cmd in jobs
+      - docker build -t example-image:latest .                                # use docker cmd in jobs
   ```
 
 4 drawbacks of dind & solutions
@@ -126,20 +131,19 @@ using docker command inside .gitlab-ci.yml: gitlab-runner with docker executor
       - docker build --cache-from $CI_REGISTRY_IMAGE:latest -t $CI_REGISTRY_IMAGE:latest .  # make the pulled image as a cache source
   ```
 
-
-the /var/run/docker.sock mount method
+B the /var/run/docker.sock mount method
 -------------------------------------
 1 install gitlab-runner
 
 2 regist gitlab-runner by:
-  $ sudo gitlab-runner register -n                   # (non-interactively register a runner)
+  $ sudo gitlab-runner register -n                                                          # (non-interactively register a runner)
   --url https://gitlabe1.ext.net.nokia.com/
   --tag docker-generic
   --executor docker
   --description "docker executor runner"
-  --docker-image "docker:20.10"
+  --docker-image "docker:20.10"                                                             # or alpine:latest
   --registration-token $GITLAB_REGISTRATION_TOKEN
-  --docker-volumes /var/run/docker.sock:/var/run/docker.sock   # mount the host docker sock into new container 
+  --docker-volumes /var/run/docker.sock:/var/run/docker.sock                                # mount the host docker sock into new container 
 
 3 advantages
   while this approach can lead to higher performance, less configuration, and none of the limitations of dind.
@@ -149,6 +153,7 @@ the /var/run/docker.sock mount method
   $ docker run -it malicious_image:latest
   $ docker rm -f $(docker ps -a)
   the ci/cd jobs might fail if two cocurrent jobs try to startup with the same container name
+
 
 reference
 ---------
