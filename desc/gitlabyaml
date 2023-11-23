@@ -1,1 +1,101 @@
 todo
+
+make persistent data cross gitlab-runner jobs
+---------------------------------------------
+1 register gitlab-runner with bind-mount
+```
+$ sudo gitlab-runner register \
+  --non-interactive \
+  --url "https://gitlabe1.ext.net.nokia.com/" \
+  --executor "docker" \
+  --tag-list "aport-specific" \
+  --registration-token "GR1348941pnfjxvcz1yWdMxBpsZLE" \
+  --docker-image alpine:latest \
+  --docker-volumes="/apk/staging:/home/reborn/packages:rw"   # mount host vol '/apk/staging' as '/home/reborn/packages'
+```
+
+2 modify .gitlab-ci.yml as:
+$ k
+```
+default:
+  image:
+    name: rebornlinux-docker-local.artifactory-blr1.int.net.nokia.com/rebornlinux/toolchain:latest
+    entrypoint: [""]
+  before_script:
+    - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlabe1.ext.net.nokia.com".insteadOf "https://gitlabe1.ext.net.nokia.com"
+
+workflow:
+  rules:
+    - if: $CI_PROJECT_PATH != 'rebornlinux/aports'    # no run on forked
+      when: never
+    - if: $CI_COMMIT_BRANCH == 'reborn'               # run on commit to reborn
+
+stages:
+  - verify
+  - upload
+
+variables:
+  GIT_STRATEGY: clone
+  GIT_DEPTH: "500"
+
+lint:
+  stage: verify
+  image: alpinelinux/apkbuild-lint-tools:latest
+  interruptible: true
+  script:
+    - lint
+  allow_failure: true
+  only:
+    - merge_requests
+  tags:
+    - aport-specific                                  # specify gitlab-runner tag
+
+.build:
+  stage: verify
+  resource_group: building                            # to enable only one job at one time (race condition)
+  interruptible: true
+  script:
+    - build.sh
+    - whoami
+    - ls -l /home/reborn/
+    - cd /home/reborn/packages && touch hello.apk     # test: try save data into runner's mounted dir -> persistent
+    - ls -l /home/reborn/packages
+  only:
+    - merge_requests
+
+build-x86_64:
+  extends: .build
+  artifacts:
+    name: MR${CI_MERGE_REQUEST_ID}_x86_64
+  tags:
+    - aport-specific
+
+upload:
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'reborn'               # only run on commit to reborn
+  stage: upload
+  resource_group: uploading
+  interruptible: false
+  script:
+    - echo 'running upload script...'
+  allow_failure: false
+  tags:
+    - aport-specific
+```
+
+3 failed on running gitlab ci jobs:
+```
+$ whoami
+  reborn
+$ ls -lh /home/reborn/packages
+  total 0      
+$ touch hello.apk /home/reborn/packages
+  touch: /home/reborn/packages: Permission denied
+  ERROR: Job failed: exit code 1
+```
+
+4 modify the permission info of owner/group on host machine of gitlab-runner:
+$ chmod -R 777 /apk/packages
+
+5 after that the job succeed
+the docker bind-mount need both host permission + mount :rw flag to work
