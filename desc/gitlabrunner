@@ -2,12 +2,13 @@
 gitlab-runner basic usages
 ==========================
 
-
+--------------------------
 gitlab-runner installation
 --------------------------
 todo
 
 
+-------------------------
 3 kinds of gitlab-runners
 -------------------------
 1) shared runners
@@ -16,6 +17,7 @@ todo
 https://docs.gitlab.com/ee/ci/runners/runners_scope.html#create-a-group-runner-with-a-runner-authentication-token
 
 
+-----------------------------------------------------------------------------
 using docker command inside .gitlab-ci.yml: gitlab-runner with shell executor
 -----------------------------------------------------------------------------
 1 install gitlab-runner
@@ -87,6 +89,7 @@ using docker command inside .gitlab-ci.yml: gitlab-runner with shell executor
       - shell-generic                                                         # assign the tag of runner for jobs to launch
   ```
 
+------------------------------------------------------------------------------
 using docker command inside .gitlab-ci.yml: gitlab-runner with docker executor
 ------------------------------------------------------------------------------
 A the dind method
@@ -132,7 +135,7 @@ A the dind method
   ```
 
 B the /var/run/docker.sock mount method
--------------------------------------
+---------------------------------------
 1 install gitlab-runner
 
 2 regist gitlab-runner by:
@@ -153,6 +156,65 @@ B the /var/run/docker.sock mount method
   $ docker run -it malicious_image:latest
   $ docker rm -f $(docker ps -a)
   the ci/cd jobs might fail if two cocurrent jobs try to startup with the same container name
+
+
+---------------------------
+how to remove gitlab-runner
+---------------------------
+A UI methods
+------------
+# inside project page -> settings -> ci/cd -> runner -> remove runner
+# check the existence of runner by:
+  $(runner host) sudo gitlab-runner list
+  docker-godevsig       Executor=docker Token=2X3MG... URL=https://gitlabe1.ext.net.nokia.com/
+  docker-rebornlinux    Executor=docker Token=-QgVm... URL=https://gitlabe1.ext.net.nokia.com/
+  shell runner          Executor=shell Token=zygsM7... URL=https://gitlabe1.ext.net.nokia.com/
+  cloud-server-1        Executor=docker Token=T2xCi... URL=https://gitlabe1.ext.net.nokia.com/   # already deleted on UI but still exist
+
+# also can verify each runner by:
+  $(runner hsot) sudo gitlab-runner verify
+    Runtime platform                                    arch=amd64 os=linux pid=4159 revision=4e1f20da version=13.4.0
+    Running in system-mode.
+
+    Verifying runner... is alive                        runner=2X3MGcwM
+    Verifying runner... is alive                        runner=-QgVmNDK
+    Verifying runner... is alive                        runner=zygsM7-R
+    ERROR: Verifying runner... is removed               runner=T2xCivsX     # the remoted runner status is not right
+    FATAL: Failed to verify runners
+
+# del the configs inside /etc/gitlab-runner/config.toml
+  $(runner host) sudo vim /etc/gitlab-runner/config.toml
+  [[runners]]
+    name = "cloud-server-1"
+    url = "https://gitlabe1.ext.net.nokia.com/"
+    token = "T2xC..."
+    executor = "docker"
+    [runners.custom_build_dir]
+    [runners.cache]
+      [runners.cache.s3]
+      [runners.cache.gcs]
+      [runners.cache.azure]
+    [runners.docker]
+      tls_verify = false
+      image = "alpine:latest"
+      privileged = true
+      disable_entrypoint_overwrite = false
+      oom_kill_disable = false
+      disable_cache = false
+      volumes = ["/apk/staging:/home/reborn/packages:rw", "/cache"]
+      shm_size = 0
+
+# check the list again -> the obsolete runner is gone
+  $(runner host) sudo gitlab-runner list
+  docker-godevsig       Executor=docker Token=2X3MG... URL=https://gitlabe1.ext.net.nokia.com/
+  docker-rebornlinux    Executor=docker Token=-QgVm... URL=https://gitlabe1.ext.net.nokia.com/
+  shell runner          Executor=shell Token=zygsM7... URL=https://gitlabe1.ext.net.nokia.com/
+
+
+B cmdline method
+----------------
+# try:
+  $(runner host) sudo gitlab-runner unregister --url https://gitlabe1.ext.net.nokia.com/ --token T2x...
 
 
 reference

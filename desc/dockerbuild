@@ -1,5 +1,5 @@
-problems when using docker build
---------------------------------
+problems when using docker build: all files under the same dir is recognized as build context
+---------------------------------------------------------------------------------------------
 $ ls -lh                                             # list all the file/dir under current dir
   total 56K
   drwxrwxr-x 69 metung metung 4.0K Sep  8 10:20 devtools

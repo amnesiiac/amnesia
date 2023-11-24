@@ -12,3 +12,5 @@ ref: https://medium.com/swlh/understanding-pipes-in-unix-with-a-sample-implement
 
 todo: a visual guide to caching inside gitlab ci/cd
 ref: https://about.gitlab.com/blog/2022/09/12/a-visual-guide-to-gitlab-ci-caching/
+
+todo: use RESTful order to manage cmd resources

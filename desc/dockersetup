@@ -1,30 +1,34 @@
+============
 docker setup
-------------
+============
 
+permission problem when newly created user try to using docker (using docker without sudo)
+------------------------------------------------------------------------------------------
+0 env
+  $ uname -a
+  Linux cloud-server-1 4.15.0-74-generic #84-Ubuntu SMP Thu Dec 19 08:06:2
 
+1 try using docker cmd as user: metung -> failed
+  $ docker ps
+  Got permission denied while trying to connect to the Docker daemon sockeontainers/json": dial unix /var/run/docker.sock: connect: permission den
 
+2 using docker cmd as root -> succeed
+  $ sudo docker ps
+  CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 
-permission problem when newly created user try to using docker
---------------------------------------------------------------
-$(cloud_server) uname -a
-Linux cloud-server-1 4.15.0-74-generic #84-Ubuntu SMP Thu Dec 19 08:06:2
+3 add metung into docker group
+  $ sudo usermod -a -G docker metung
 
-# try using docker cmd as user: metung -> failed
-$(cloud_server) docker ps
-Got permission denied while trying to connect to the Docker daemon sockeontainers/json": dial unix /var/run/docker.sock: connect: permission den
+4 but sill failed to use docker cmd (the group membership is not valid till a restart)
+  $ docker ps
+  Got permission denied while trying to connect to the Docker daemon sockeontainers/json": dial unix /var/run/docker.sock: connect: permission den
 
-# using docker cmd as root -> succeed
-$(cloud_server) sudo docker ps
-CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+5.1 create a new ssh connection && test docker cmd -> succeed (if in a vm, need restart vm to enable)
+  $ docker ps
+  CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 
-# add metung into docker group
-$(cloud_server) sudo usermod -a -G docker metung
+5.2 or could also try the cmd to refresh manually
+  $ newgrp docker
 
-# but sill failed to use docker cmd
-$(cloud_server) docker ps
-Got permission denied while trying to connect to the Docker daemon sockeontainers/json": dial unix /var/run/docker.sock: connect: permission den
-
-# create a new ssh connection && test docker cmd -> succeed
-metung@cloud-server-1:~$ docker ps
-CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
-
+6 finally, try:
+  $ docker run hello-world

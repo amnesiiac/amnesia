@@ -1,0 +1,22 @@
+===============================
+ways to debug inside dockerfile
+===============================
+
+1 add the debug cmd with 'exit 1'
+  given dockerfile.toolchain as:
+  ```
+  ARG ALPINE_VER=3.17
+  ARG SITE=artifactory-blr1.int.net.nokia.com
+  ARG REBORN_BUILD_KEY=reborn-638089aa
+  FROM rebornlinux-docker-local.$SITE/rebornlinux/base:latest
+  
+  ARG ALPINE_VER
+  ENV ALPINE_VER=$ALPINE_VER
+  ARG SITE
+  ARG REBORN_BUILD_KEY
+  ARG ARTIFACTORY_REBORN=https://$SITE/artifactory/rebornlinux-generic-local
+  
+  RUN cat /etc/apk/repositories && exit 1       # debug cmd, will run dockerfile till this cmd
+
+  RUN apk add alpine-sdk
+```
