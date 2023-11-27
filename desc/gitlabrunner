@@ -213,8 +213,17 @@ A UI methods
 
 B cmdline method
 ----------------
-# try:
-  $(runner host) sudo gitlab-runner unregister --url https://gitlabe1.ext.net.nokia.com/ --token T2x...
+# unregister gitlab runner using url and runner's token
+  $(runner host) sudo gitlab-runner unregister --url https://gitlabe1.ext.net.nokia.com/ --token Zy2qJRMJ3sQd2BzH3LhD
+  Runtime platform                                    arch=amd64 os=linux pid=18429 revision=4e1f20da version=13.4.0
+  Running in system-mode.
+
+  Unregistering runner from GitLab succeeded          runner=Zy2qJRMJ
+  Updated /etc/gitlab-runner/config.toml
+
+# the runner's token could be found in both '/etc/gitlab-runner/config.toml' or using 'sudo gitlab-runner list' output
+
+# inside the web UI of gitlab project -> settings -> ci/cd -> runners (the web will automatically updated)
 
 
 reference
