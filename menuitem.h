@@ -429,10 +429,10 @@ MenuItem* initdata(){
         {"ci/cd +", {{"gitlab ci/cd +", {{"*basic pipeline to register runner for project or a group##gitlabrunner"},
                                          {"*basic gitlab yaml usages & cautions##gitlabyaml"}}},
                      {"github actions +"}}},
-        {"alpine +", {{"apk official doc site#https://wiki.alpinelinux.org/wiki/Main_Page#"}, 
-                      {"apk info +", {{"show all installed apk#apk info#"}, 
-                                      {"show all installed apk with 1line desc#apk -vv info#"}, 
-                                      {"show detailed info of certain apk#apk info -a ${apk}#"}}}, 
+        {"alpine +", {{"apk official doc site#https://wiki.alpinelinux.org/wiki/Main_Page#"},
+                      {"apk info +", {{"show all installed apk#apk info#"},
+                                      {"show all installed apk with 1line desc#apk -vv info#"},
+                                      {"show detailed info of certain apk#apk info -a ${apk}#"}}},
                       {"show graphviz code for apk dependencies#apk dot ${apk}#"}}},
     };
     return menu_ptr;
