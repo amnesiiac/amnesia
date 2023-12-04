@@ -91,7 +91,7 @@ MenuItem* initdata(){
                        {"git pull = git fetch + git merge#git pull#"},
                        {"git push +", {{"push commit to remote (the same branch as local)#git push -u origin#"},
                                        {"push commit to certain branch of origin#git push -u origin ${branch}#"},
-                                       {"forcibly overwrite remote with local (same branch between local/remote)#git push -f ${remotename} ${branch}#"},
+                                       {"forcibly overwrite remote with local (same branch between local/remote)#git push -f ${remotename} $(git branch | awk '{print $2}')#"},
                                        {"forcibly overwrite remote with local (different branch between local/remote)#git push -f ${remotename} ${localbranch}:${remotebranch}#"},
                                        {"delete remote branch#git push ${origin} -d ${branch}#"}}},
                        {"git branch +", {{"*list local branches#git branch --list#gitbranch"},
