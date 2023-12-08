@@ -1,0 +1,25 @@
+what is checksum offloading
+---------------------------
+ref: https://wiki.wireshark.org/CaptureSetup/Offloading
+
+
+what is checksum
+----------------
+ref: https://www.wireshark.org/docs/wsug_html_chunked/ChAdvChecksums.html
+
+
+what is tcp offloading enging
+-----------------------------
+ref: https://en.wikipedia.org/wiki/TCP_offload_engine
+
+
+hostfw code in action
+---------------------
+# using tcpdump for pkts analysis, report:
+  checksum 0x2a37 incorrect, shuld be 0xaf9a(may be caused by "TCP checksum offload"?)
+
+  this might due to some program secretly modify the package, which lead to checksum mismatch
+  and checksum offload is enabled, so the package is dropped.
+
+# some code fix, just disable all checksum offload of the transmission path:
+  $ hg diff -c 20523
