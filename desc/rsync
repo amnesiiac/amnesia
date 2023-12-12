@@ -1,0 +1,147 @@
+==================
+rsync introduction 
+==================
+a fast, versatile, remote (and local) file-copying tool
+
+
+dry-run to check what need to be sync, will result in ./hostfw/*
+----------------------------------------------------------------
+```text
+$ pwd
+/repo/metung/cc
+
+$ rsync -Pcauvn /repo/metung/devtools/hostfw .
+sending incremental file list
+hostfw/
+hostfw/.style.yapf
+hostfw/DEVELOPER
+hostfw/README
+hostfw/banner.txt
+hostfw/board_package_adapter.py
+hostfw/build_devices.py
+hostfw/code_format.sh
+hostfw/default_values.yaml
+hostfw/devtools.ci
+hostfw/download-host-build.py
+...
+sent 17,329 bytes  received 1,138 bytes  36,934.00 bytes/sec
+total size is 1,731,654  speedup is 93.77 (DRY RUN)
+```
+
+
+dry-run: all content including hostfw dir itself will be sync under hostfw
+--------------------------------------------------------------------------
+```text
+$ rsync -Pcauvn /repo/metung/devtools/hostfw ./hostfw
+sending incremental file list
+created directory ./hostfw   <--- will result in ./hostfw/hostfw/*
+hostfw/
+hostfw/.style.yapf
+hostfw/DEVELOPER
+hostfw/README
+hostfw/banner.txt
+hostfw/board_package_adapter.py
+hostfw/build_devices.py
+hostfw/code_format.sh
+hostfw/default_values.yaml
+hostfw/devtools.ci
+hostfw/download-host-build.py
+...
+sent 17,329 bytes  received 1,169 bytes  36,996.00 bytes/sec
+total size is 1,731,654  speedup is 93.61 (DRY RUN)
+```
+
+
+run for real: the folder ./hostfw/* is sync with /repo/metung/devtools/hostfw
+-----------------------------------------------------------------------------
+all contexts (file/dir) inside /repo/metung/devtools/hostfw is copy to ./hostfw/*,
+the existed file/dir of source can be sync with target.
+the newly add file/dir of source can be sync with target.
+the newly delete file/dir of source cannot be sync with target.
+the newly add file/dir of target cannot not be sync back to source.
+```text
+$ rsync -Pcauv /repo/metung/devtools/hostfw ./hostfw
+sending incremental file list
+hostfw/
+hostfw/.style.yapf
+         11,903 100%    0.00kB/s    0:00:00 (xfr#1, to-chk=348/350)
+hostfw/DEVELOPER
+          7,957 100%    7.59MB/s    0:00:00 (xfr#2, to-chk=347/350)
+hostfw/README
+         22,926 100%   21.86MB/s    0:00:00 (xfr#3, to-chk=346/350)
+hostfw/banner.txt
+            975 100%  952.15kB/s    0:00:00 (xfr#4, to-chk=345/350)
+hostfw/board_package_adapter.py
+          3,282 100%    3.13MB/s    0:00:00 (xfr#5, to-chk=344/350)
+hostfw/build_devices.py
+         61,085 100%   58.26MB/s    0:00:00 (xfr#6, to-chk=343/350)
+hostfw/code_format.sh
+            159 100%  155.27kB/s    0:00:00 (xfr#7, to-chk=342/350)
+hostfw/default_values.yaml
+          5,650 100%    5.39MB/s    0:00:00 (xfr#8, to-chk=341/350)
+...
+sent 1,760,203 bytes  received 5,670 bytes  3,531,746.00 bytes/sec
+total size is 1,731,654  speedup is 0.98
+```
+
+
+make things verbosely by double -v to check exactly what is uptodate & what is not
+----------------------------------------------------------------------------------
+```text
+$ rsync -Pcauvvn /repo/metung/devtools/hostfw .
+sending incremental file list
+hostfw/
+
+sent 16,282 bytes  received 91 bytes  32,746.00 bytes/sec
+total size is 1,731,654  speedup is 105.76 (DRY RUN)
+[metung@spine cc]$ rsync -Pcauvvn /repo/metung/devtools/hostfw .
+sending incremental file list
+delta-transmission disabled for local transfer or --whole-file
+hostfw/.style.yapf is uptodate
+hostfw/DEVELOPER is uptodate
+hostfw/README is uptodate
+hostfw/banner.txt is uptodate
+hostfw/board_package_adapter.py is uptodate
+hostfw/build_devices.py is uptodate
+hostfw/code_format.sh is uptodate
+hostfw/default_values.yaml is uptodate
+hostfw/devtools.ci is uptodate
+hostfw/download-host-build.py is uptodate
+...
+```
+
+using delete option to enable tracking deleted file/dir inside target dir according to source dir
+-----------------------------------------------------------------------------------------
+without --delete option, the removal of file kkk in source dir is not reflected
+```text
+$ rsync -Pcauvn /repo/metung/devtools/hostfw .
+sending incremental file list
+
+sent 16,279 bytes  received 88 bytes  32,734.00 bytes/sec
+total size is 1,731,654  speedup is 105.80 (DRY RUN)
+```
+with option enabled:
+```text
+$ rsync -Pcauvn --delete /repo/metung/devtools/hostfw .
+sending incremental file list
+deleting hostfw/kkk
+
+sent 16,279 bytes  received 102 bytes  32,762.00 bytes/sec
+total size is 1,731,654  speedup is 105.71 (DRY RUN)
+```
+
+
+last but not least
+------------------
+if want source & target folder completely sync with each other,
+need to run rsync for both side as source.
+
+
+sync for hostfw
+---------------
+$ cd /repo/metung/cc && rsync -Pcauv /repo/metung/devtools/hostfw .            # rsync
+$ hg convert --filemap /tmp/filemap /repo/metung/devtools /repo/metung/cc/tmp  # extract all hostfw related hg history into /repo/metung/cc/.hg
+$ mv /repo/metung/cc/tmp/.hg /repo/metung/cc/hostfw
+$ cat /tmp/filemap
+include hostfw
+rename hostfw .

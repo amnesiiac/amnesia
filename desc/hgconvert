@@ -1,0 +1,92 @@
+========================================================
+extract subfolder commit history for a mercurial project
+========================================================
+
+mercurial config
+----------------
+```text
+# user config see hg help config for more info
+[ui]
+username = metung <melon.tung@nokia-sbell.com>
+verbose = True
+
+# we recommend enabling tweakdefaults to get slight improvements to the UI over
+# time. Make sure to set HGPLAIN in the environment when writing scripts!
+# tweakdefaults = True
+
+# uncomment to disable color in command output, see hg help color for details
+# color = never
+
+# uncomment to disable command output pagination, see hg help pager for details
+# paginate = never
+
+# see hg help extensions for more info
+[extensions]
+color =
+shelve = 
+rebase = 
+strip = 
+hgext.convert =
+
+# for auto code reformat
+[hooks]
+# pretxncommit.format = ./hostfw/code_format.sh
+
+[alias]
+```
+
+code in action
+--------------
+# we only want to derive mercurial record from devtools/hostfw
+  firstly need to enable hgext.convert extension before we started.
+
+$ cat /tmp/filemap
+include hostfw
+rename hostfw .
+
+# hg convert --filemap ${mapfile} ${original_proj_dir} ${new_subrepo_dir}
+$ hg convert --filemap /tmp/filemap /repo/metung/devtools hostfw
+
+# the commit history belong to subfolder hostfw is crafted out
+$ cd hostfw && ls -a
+. .. .hg
+
+# could see history of commits
+```text
+changeset:   875:008399ef0a23
+tag:         tip
+user:        hchen <Hao.Q.Chen@nokia-sbell.com>
+date:        Mon Dec 11 09:50:26 2023 +0800
+summary:     hostfw: update onus ssh port tag
+
+changeset:   874:a3aa187d7be3
+user:        hchen <Hao.Q.Chen@nokia-sbell.com>
+date:        Thu Nov 30 16:22:12 2023 +0800
+summary:     hostfw: add chassis info default
+
+changeset:   873:336aef7b28db
+user:        hchen <Hao.Q.Chen@nokia-sbell.com>
+date:        Wed Nov 01 10:37:34 2023 +0800
+summary:     hostfw: disable veth offloading
+
+changeset:   872:f1c200a3346e
+user:        hchen <Hao.Q.Chen@nokia-sbell.com>
+date:        Wed Nov 22 15:33:05 2023 +0800
+summary:     hostfw: bug fix
+
+changeset:   871:a39f3411a37e
+parent:      869:d260203b6594
+user:        metung <melon.tung@nokia-sbell.com>
+date:        Wed Nov 22 21:48:52 2023 +0800
+summary:     hostfw: fix host_env_info script make hostfw stuck when user has no sudo prio
+```
+
+# but has limitations of some functions
+$ hg annotate -uncl ${somefile}
+abort: host_env_info.py: no such file in rev 000000000000
+
+
+reference
+---------
+ref: https://wiki.mercurial-scm.org/ConvertExtension#Converting_from_Mercurial
+ref: https://stackoverflow.com/a/921521
