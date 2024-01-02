@@ -1,7 +1,9 @@
-todo
+====================================================
+several routines and problem when config gitlab yaml
+====================================================
 
-make persistent data cross gitlab-runner jobs
----------------------------------------------
+permission denied when making job generated stuff persistent cross gitlab-runner jobs
+-------------------------------------------------------------------------------------
 1 register gitlab-runner with bind-mount
 ```
 $ sudo gitlab-runner register \
@@ -13,10 +15,13 @@ $ sudo gitlab-runner register \
   --docker-image alpine:latest \
   --docker-volumes="/apk/staging:/home/reborn/packages:rw"   # mount host vol '/apk/staging' as '/home/reborn/packages'
 ```
+the bind mount config could be changed later by:
+```text
+sudo vim /etc/gitlab-runner/config.toml
+```
 
 2 modify .gitlab-ci.yml as:
-$ k
-```
+```text
 default:
   image:
     name: rebornlinux-docker-local.artifactory-blr1.int.net.nokia.com/rebornlinux/toolchain:latest
@@ -83,8 +88,8 @@ upload:
     - aport-specific
 ```
 
-3 failed on running gitlab ci jobs:
-```
+3 failed to create dir in mounted dir by gitlab ci job:
+```text
 $ whoami
   reborn
 $ ls -lh /home/reborn/packages
@@ -95,7 +100,9 @@ $ touch hello.apk /home/reborn/packages
 ```
 
 4 modify the permission info of owner/group on host machine of gitlab-runner:
+```text
 $ chmod -R 777 /apk/packages
+```
 
 5 after that the job succeed
 the docker bind-mount need both host permission + mount :rw flag to work

@@ -2,13 +2,11 @@
 gitlab-runner basic usages
 ==========================
 
---------------------------
 gitlab-runner installation
 --------------------------
 todo
 
 
--------------------------
 3 kinds of gitlab-runners
 -------------------------
 1) shared runners
@@ -17,7 +15,6 @@ todo
 https://docs.gitlab.com/ee/ci/runners/runners_scope.html#create-a-group-runner-with-a-runner-authentication-token
 
 
------------------------------------------------------------------------------
 using docker command inside .gitlab-ci.yml: gitlab-runner with shell executor
 -----------------------------------------------------------------------------
 1 install gitlab-runner
