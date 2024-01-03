@@ -14,3 +14,7 @@ todo: a visual guide to caching inside gitlab ci/cd
 ref: https://about.gitlab.com/blog/2022/09/12/a-visual-guide-to-gitlab-ci-caching/
 
 todo: use RESTful order to manage cmd resources
+each menu name represent the resource that need to be view/manipulate, like:
+object + resource + operations
+rather than
+use object + operations + resource format
