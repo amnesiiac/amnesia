@@ -347,6 +347,12 @@ MenuItem* initdata(){
                                    {"lsblk +", {{"show help page & available column for lsblk to output#lsblk --help#"},
                                                 {"show block device info with full path displayed#lsblk -p#"},
                                                 {"show block device info with chosen column to display (available column & desc see help)#lsblk -o NAME,MOUNTPOINT#"}}}}},
+        {"system activity monitoring +", {{"auditctl +", {{"list all existed audit rules#sudo auditctl -l#"},
+                                                          {"add audit rules for monitoring file write, attribute changing#sudo auditctl -w /repo/reborn/logg/init-aarch64.log -p wa#"},
+                                                          {"delete all audit rules#sudo auditctl -D#"},
+                                                          {"delete certain audit rules##"},
+                                                          {"check all audit log#sudo vim /var/log/audit/audit.log#"}}},
+                                          {"inotify +"}}},
         {"search +", {{"find +", {{"show manual of find#man find#"},
                                   {"file operations +", {{"list files under certain dir#find ${dir} -type f#"},
                                                          {"list files under certain dir matches the name pattern recursively#find . -type f -name '*.cpp'#"},
@@ -480,5 +486,3 @@ MenuItem* initdata(){
     };
     return menu_ptr;
 }
-
-
