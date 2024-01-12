@@ -364,7 +364,8 @@ MenuItem* initdata(){
                                   {"dir operations +", {{"list dirs under cur dir#find . -type d#"},
                                                         {"list dirs under cur dir matches the name pattern recursively#find . -type d -name '*.cpp'#"},
                                                         {"list dirs under cur dir doesnt match the name pattern recursively#find . -type d ! -name '*.cpp'#"},
-                                                        {"remove subdirs under certain dir but exclude level-1 subdir/files recursively match specific pattern#find ${dir} -maxdepth 1 -type d ! -path './${subdirname}' -exec rm -rf {} +#"}}}}},
+                                                        {"remove subdirs under certain dir but exclude level-1 subdir/files recursively match specific pattern#find ${dir} -maxdepth 1 -type d ! -path './${subdirname}' -exec rm -rf {} +#"}}},
+                                  {"soft link operations +"}}},
                       {"grep +", {{"search for a match to pattern in certain file#grep '${pattern}' ${file}#"},
                                   {"search for a match to pattern under certain dir#grep -r '${pattern}' ${dir}#"},
                                   {"pattern +", {{"search for plain text without regex in file/dir#grep -e ${no_regex_pattern} ...#"},
@@ -492,6 +493,9 @@ MenuItem* initdata(){
                                       {"show all installed apk with 1line desc#apk -vv info#"},
                                       {"show detailed info of certain apk#apk info -a ${apk}#"}}},
                       {"show graphviz code for apk dependencies#apk dot ${apk}#"}}},
+        {"tools(3rd party) +", {{"asciinema +", {{"record cast file startup (use ctrl+d to stop#asciinema rec ${record.cast}#"},
+                                                 {"play cast file (use ctrl+c to stop)#asciinema play ${record.cast}#"},
+                                                 {"generate a new faster played record using the existed record (asciinema play -h)#asciinema rec -c 'asciinema play -s 4 ${current.cast}' ${faster.cast}#"}}}}},
     };
     return menu_ptr;
 }
