@@ -321,6 +321,7 @@ MenuItem* initdata(){
                                    {"tar +", {{"extract the content of xxx (tar)#tar -xvf ${xxx.tar}#"},
                                               {"extract the content of xxx compressed by gzip (tar.gz)#tar -xzvf ${xxx.tar.gz}#"},
                                               {"extract the content of xxx compressed by bzip2 (tar.bz2)#tar -xjvf ${xxx.tar.bz2#"},
+                                              {"zip files under dir using gzip (tar.gz)#tar -czvf ${xxx.tar.gz} ${dir}#"},
                                               {"zip files under dir but excluding all files under certain folder using gzip#tar --exclude='*/${foldername}/*' -zcvf ${out.tgz} ${indir}#"}}},
                                    {"use zcat to grep certain config inside zipped kernel config(if running kernel is configured to have config.gz)#zcat /proc/config.gz | grep -i ${pattern_to_search}#"},
                                    {"dir operations +", {{"create dir under $PWD#mkdir ${dirname}#"},
