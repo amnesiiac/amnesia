@@ -233,6 +233,8 @@ MenuItem* initdata(){
                                        {"iptables list rules +", {{"*list rules of all chains in table(raw mangle nat filter)#iptables -n -v -L -t ${table}#iptables"},
                                                                   {"*list rules of a chain in all table#iptables -nvL ${chainname}#dockeriptables"},
                                                                   {"list rules of certain chain in certain table#iptables -n -v -L ${chain} -t ${table}#iptables"}}}}},
+                       {"dns +", {{"get ip for domain name (nslookup)#nslookup ${domain_name}#"},
+                                  {"get ip for domain name (dig)#dig ${domain_name}#"}}},
                        {"brctl +", {{"brctl show +", {{"show bridge general info#brctl show#"},
                                                       {"show bridge info#brctl show ${bridge}#"},
                                                       {"show bridge mac info#brctl showmacs ${bridge}#"},
