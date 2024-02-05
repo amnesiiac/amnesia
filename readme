@@ -21,25 +21,26 @@ use object + operations + resource format
 
 
 current supported layer-1 tags
->>> mac +
+
 mac +
 transhell
 blog +
 latex +
 gnu cmd +
-revision control +
+revision +
 network +
+downloader +
 ls series +
 docker +
 filesystem & devices +
 system activity monitoring +
 search +
-su/sudo/users/groups +
+su/sudo/id/user/groups +
 nvim +
 tmux +
 crontab +
 kill proc +
-performance analysis +
+performance +
 debug +
 data serialization +
 encryption +
@@ -47,3 +48,6 @@ ssh +
 language +
 ci/cd +
 alpine +
+tools +
+time +
+kernel +
