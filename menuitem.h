@@ -9,7 +9,7 @@ struct MenuItem{
 
 // load data into menu data structure => todo: move the data structure to a standalone file
 MenuItem* initdata(){
-    // Create the menu structure
+    // create the menu structure
     MenuItem *menu_ptr = new MenuItem;
     menu_ptr->name = "Main Menu";
     menu_ptr->submenu = {
@@ -548,7 +548,17 @@ MenuItem* initdata(){
                                       {"gofmt +", {{"show auto format tool help#gofmt --help#"},
                                                    {"format go program and output in stdout#gofmt ${path/test.go}#"},
                                                    {"format go program in place#gofmt -w ${path/test.go}#"}}}}},
-                        {"python +", {{"pytest +", {{"get test result for ut script#pytest test_xxx.py#"},
+                        {"python +", {{"pdb +", {{"setup pdb debugger init breakpoint#import pdb; pdb.set_trace()#"},
+                                                 {"list 11 lines arround current execution line#l.#"},
+                                                 {"list a range of lines 146,170#l 146,170#"},
+                                                 {"list a range of lines 146,146+20#l 146,20#"},
+                                                 {"list lines appended to current shown context lines#Enter#"},
+                                                 {"continue execution (no-following func jump)#n#"},
+                                                 {"continue execution (following func jump)#s#"},
+                                                 {"jump back/forward to certain line & continue execution#j ${lineno}#"},
+                                                 {"jump to function return clause#r#"},
+                                                 {"show stacktrace (cal sequence)#w#"}}},
+                                      {"pytest +", {{"get test result for ut script#pytest test_xxx.py#"},
                                                     {"get test result with program stdout for ut script#pytest -rp test_xxxx.py#"}}}}},
                         {"c +"},
                         {"cpp +"}}},
