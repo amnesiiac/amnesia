@@ -537,7 +537,7 @@ MenuItem* initdata(){
                                       {"go mod +", {{"show help page#go help mod#"},
                                                     {"init cur dir as a module with name#go mod init ${modname}#"},
                                                     {"peeling module off cur dir#rm go.mod go.sum#"},
-                                                    {"add missing & remove unused modules#go mod tidy#"},
+                                                    {"tidy modules (add missing & remove unused mods & adapt mods according to newly golang version)#go mod tidy#"},
                                                     {"show src -> dependency pairs of cur module#go mod graph#"}}},
                                       {"go get +", {{"show help page#go help get#"},
                                                     {"add package to cur module#go get ${pkgname}#"},
