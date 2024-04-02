@@ -49,6 +49,7 @@ MenuItem* initdata(){
                               {"*use yes with pipe to enable auto input for interactive prompt (set +o pipefail)#yes | ${interactive_cmd}#yes"},
                               {"*use yes with pipe to enable auto input for interactive prompt (set -o pipefail)#{ yes || :; } | ${interactive_cmd}#yes"}}}}},
         {"revision +", {
+            {"git mercurial comparison table#https://wiki.mercurial-scm.org/GitConcepts#"},
             {"git +", {{"git init +", {{"*init git repo in current dir#git init#gitinit"},
                                        {"del git repo in current dir#rm -rf .git#"}}},
                        {"git config +", {{"list all config#git config --list#"},
@@ -62,7 +63,8 @@ MenuItem* initdata(){
                        {"git diff +", {{"show diff between wkdir vs staged#git diff#"},
                                        {"show diff between wkdir vs staged with colored text#git diff --color#"},
                                        {"show diff between wkdir vs staged with colored word-by-word diff#git diff --color-words#"},
-                                       {"show diff between staged vs committed#git diff --staged#"}}},
+                                       {"show diff between staged vs committed#git diff --staged#"},
+                                       {"show diff between any selected 2 files#git diff --no-index ${file1} ${file2}#"}}},
                        {"git show +", {{"show code changes made by latest commit#git show HEAD#"},
                                        {"show code changes made by the second latest commit#git show HEAD^#"},
                                        {"show code changes made by certain commit#git show ${commitid}#"},
