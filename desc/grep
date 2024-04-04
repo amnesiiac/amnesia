@@ -1,0 +1,12 @@
+exclude dir by pattern when grep content
+----------------------------------------
+the following will search for string size in all file under current dir,
+but the dir matches host_build like: host_builds/ host_build_results/ will be
+excluded by grep tool.
+
+```text
+$ grep -r --exclude-dir=host_build* 'size' .
+```
+
+note that, any dir or subdir matches the pattern given will be excluded from'
+content search.

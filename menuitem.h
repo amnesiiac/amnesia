@@ -421,7 +421,7 @@ MenuItem* initdata(){
                                   {"soft link operations +"}}},
                       {"grep +", {{"search for matched pattern in file#grep '${pattern}' ${file}#"},
                                   {"search for matched pattern under dir#grep -r '${pattern}' ${dir}#"},
-                                  {"exclude dir when search for matched pattern under dir#grep -r --exclude-dir=${dir} '${pattern}' ${dir}#"},
+                                  {"*exclude dir when search for matched pattern under dir#grep -r --exclude-dir=${dir_pattern} '${pattern}' ${dir}#grep"},
                                   {"pattern collections +", {{"search for text not matching regex in file/dir#grep -e ${pattern} ...#"},
                                                              {"search for text not matching regex (only output the matched part)#grep -oe ${pattern} ...#"},
                                                              {"search for text with regex wildcard supported#grep -E {regex_pattern}#"},
