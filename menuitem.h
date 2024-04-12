@@ -49,7 +49,7 @@ MenuItem* initdata(){
                               {"*use yes with pipe to enable auto input for interactive prompt (set +o pipefail)#yes | ${interactive_cmd}#yes"},
                               {"*use yes with pipe to enable auto input for interactive prompt (set -o pipefail)#{ yes || :; } | ${interactive_cmd}#yes"}}}}},
         {"revision +", {
-            {"git mercurial comparison table#https://wiki.mercurial-scm.org/GitConcepts#"},
+            {"git vs mercurial#https://wiki.mercurial-scm.org/GitConcepts#"},
             {"git +", {{"git init +", {{"*init git repo in current dir#git init#gitinit"},
                                        {"del git repo in current dir#rm -rf .git#"}}},
                        {"git config +", {{"list all config#git config --list#"},
