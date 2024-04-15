@@ -579,7 +579,7 @@ MenuItem* initdata(){
                                             {"list the code within the range [startline, endline]#l ${startline},${endline}#"},
                                             {"list the code within the range [startline, startline+count] (only if count<startline)#l ${startline},${+count}#"}}},
                                  {"dlv +", {{"golang debugger doc#https://github.com/go-delve/delve/tree/master/Documentation#"},
-                                            {"config vim as dlv default editor by cmd edit#export DELVE_EDITOR=vim#"},
+                                            {"config vim as dlv default editor by cmd edit (vi is not correct supported)#export DELVE_EDITOR=vim#"},
                                             {"config the number of line range displayed by cmd list#config source-list-line-count 20#"},
                                             {"debug golang program with option#dlv debug --check-go-version=false ${program.go} -- -option1 -option2 'fuck'#"},
                                             {"list a range of src code arround program:line 20#list ${program.go}:20#"},
