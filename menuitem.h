@@ -304,7 +304,7 @@ MenuItem* initdata(){
                                    {"*build img using specified dockerkfile#docker build -f ${dockerfile_name} -t ${image}:${tag} .#dockerbuild"},
                                    {"*build img in multi-stage way#see desc/dockerfile for details#docker multistage build"},
                                    {"check detailed img info (rootfs, exposed port...)#docker image inspect ${image}#"},
-                                   {"export docke image to local tar file#docker save -o ${output}.tar ${image}:latest#"},
+                                   {"export docker image to local tar file#docker save -o ${output}.tar ${image}:latest#"},
                                    {"import local tar file into docker image#docker load -i ${input.tar}#"}}},
                       {"history +", {{"show image build history(cmd/arg/env)#docker history ${image} -H#"},
                                      {"show image build history in verbose(cmd/arg/env)#docker history ${image} --no-trunc#"}}},
