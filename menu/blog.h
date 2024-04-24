@@ -1,6 +1,9 @@
+#ifndef BLOG_H
+#define BLOG_H
+
 #include "base.h"
 
-MenuItem* get_blog_ptr(){
+MenuItem* Method::get_blog_ptr(){
     MenuItem* blog_ptr = new MenuItem;
     blog_ptr->name = "blog";
     blog_ptr->submenu = {
@@ -15,3 +18,5 @@ MenuItem* get_blog_ptr(){
     };
     return blog_ptr;
 }
+
+#endif

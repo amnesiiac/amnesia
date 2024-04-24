@@ -1,4 +1,4 @@
-#ifndef BASE_H     // avoid dulicate include
+#ifndef BASE_H
 #define BASE_H
 
 #include <vector>
@@ -10,25 +10,38 @@ struct MenuItem{
     std::vector<MenuItem> submenu;
 };
 
-// make this menu builder as singleton instance using lcoal static solution, which can only create one global distance
-class MenuBuilder{
-private:
-    MenuBuilder(){};
-    ~ MenuBuilder(){};
-    MenuBuilder& operator=(const MenuBuilder&);
-    MenuBuilder(const MenuBuilder&);
+class Method{
 public:
-    static MenuItem* buildmenu(std::vector<MenuItem>&);
+    MenuItem* get_mac_ptr();
+    MenuItem* get_transhell_ptr();
+    MenuItem* get_latex_ptr();
+    MenuItem* get_gnu_ptr();
+    MenuItem* get_blog_ptr();
 };
 
-MenuItem* MenuBuilder::buildmenu(std::vector<MenuItem*>& menus){
-    static MenuItem* local_menu_ptr;
+class MenuBuilder{  // singleton
+private:
+    MenuBuilder(){};
+    ~MenuBuilder(){};
+    MenuBuilder(const MenuBuilder&);
+    const MenuBuilder& operator=(const MenuBuilder&);
+public:
+    static MenuItem* buildmenu(const std::vector<MenuItem*>&);  // independant among all instance
+};
+
+MenuItem* MenuBuilder::buildmenu(const std::vector<MenuItem*>& menus){
+	static MenuItem menu;
+    static MenuItem* local_menu_ptr = &menu;  // global unique
     local_menu_ptr->name = "Main Menu";
     local_menu_ptr->submenu = {};
-    for(MenuItem* menu_ptr: menus){
-        local_menu_ptr->submenu.insert(local_menu_ptr->submenu.end(), menu_ptr->submenu.begin(), menu_ptr->submenu.end());
+    for(const MenuItem* menu_ptr: menus){
+        local_menu_ptr->submenu.insert(
+            local_menu_ptr->submenu.end(),
+            menu_ptr->submenu.begin(),
+            menu_ptr->submenu.end()
+        );
     }
     return local_menu_ptr;
-}
+};
 
 #endif // BASE_H

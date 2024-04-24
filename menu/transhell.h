@@ -1,6 +1,9 @@
+#ifndef TRANSHELL_H
+#define TRANSHELL_H
+
 #include "base.h"
 
-MenuItem* get_transhell_ptr(){
+MenuItem* Method::get_transhell_ptr(){
     MenuItem* transhell_ptr = new MenuItem;
     transhell_ptr->name = "transhell";
     transhell_ptr->submenu = {
@@ -8,3 +11,5 @@ MenuItem* get_transhell_ptr(){
     };
     return transhell_ptr;
 }
+
+#endif

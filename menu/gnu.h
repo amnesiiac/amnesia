@@ -1,6 +1,9 @@
+#ifndef GNU_H
+#define GNU_H
+
 #include "base.h"
 
-MenuItem* get_gnu_ptr(){
+MenuItem* Method::get_gnu_ptr(){
     MenuItem* gnu_ptr = new MenuItem;
     gnu_ptr->name = "gnu";
     gnu_ptr->submenu = {
@@ -32,3 +35,5 @@ MenuItem* get_gnu_ptr(){
     };
     return gnu_ptr;
 }
+
+#endif

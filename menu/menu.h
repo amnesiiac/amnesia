@@ -1,3 +1,6 @@
+#ifndef MENU_H
+#define MENU_H
+
 #include "base.h"
 #include "mac.h"
 #include "transhell.h"
@@ -5,27 +8,24 @@
 #include "latex.h"
 #include "gnu.h"
 
-// create MenuBuilder singleton instance
-// invoke its public method to return the menu_ptr as below
 
 MenuItem* initdata(){
-    MenuItem *menu_ptr = new MenuItem;
-    menu_ptr->name = "Main Menu";
+    std::map<std::string, MenuItem* (Method::*)()> method_map;
 
-    MenuItem* mac_ptr = get_mac_ptr();
-    menu_ptr->submenu.insert(menu_ptr->submenu.end(), mac_ptr->submenu.begin(), mac_ptr->submenu.end());
+    method_map["mac"] = &Method::get_mac_ptr;
+    method_map["transhell"] = &Method::get_transhell_ptr;
+    method_map["latex"] = &Method::get_latex_ptr;
+    method_map["gnu"] = &Method::get_gnu_ptr;
+    method_map["blog"] = &Method::get_blog_ptr;
 
-    MenuItem* transhell_ptr = get_transhell_ptr();
-    menu_ptr->submenu.insert(menu_ptr->submenu.end(), transhell_ptr->submenu.begin(), transhell_ptr->submenu.end());
+    Method mlib;
+    std::vector<MenuItem*> menus;
+    for(auto it=method_map.begin(); it!=method_map.end(); ++it){
+        menus.push_back((mlib.*(it->second))());
+    }
 
-    MenuItem* blog_ptr = get_blog_ptr();
-    menu_ptr->submenu.insert(menu_ptr->submenu.end(), blog_ptr->submenu.begin(), blog_ptr->submenu.end());
-
-    MenuItem* latex_ptr = get_latex_ptr();
-    menu_ptr->submenu.insert(menu_ptr->submenu.end(), latex_ptr->submenu.begin(), latex_ptr->submenu.end());
-
-    MenuItem* gnu_ptr = get_gnu_ptr();
-    menu_ptr->submenu.insert(menu_ptr->submenu.end(), gnu_ptr->submenu.begin(), gnu_ptr->submenu.end());
-
+    MenuItem* menu_ptr = MenuBuilder::buildmenu(menus);
     return menu_ptr;
 }
+
+#endif

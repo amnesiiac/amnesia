@@ -1,6 +1,9 @@
+#ifndef MAC_H
+#define MAC_H
+
 #include "base.h"
 
-MenuItem* get_mac_ptr(){
+MenuItem* Method::get_mac_ptr(){
     MenuItem* mac_ptr = new MenuItem;
     mac_ptr->name = "mac";
     mac_ptr->submenu = {
@@ -19,3 +22,5 @@ MenuItem* get_mac_ptr(){
     };
     return mac_ptr;
 }
+
+#endif

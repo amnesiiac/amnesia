@@ -1,6 +1,9 @@
+#ifndef LATEX_H
+#define LATEX_H
+
 #include "base.h"
 
-MenuItem* get_latex_ptr(){
+MenuItem* Method::get_latex_ptr(){
     MenuItem* latex_ptr = new MenuItem;
     latex_ptr->name = "latex";
     latex_ptr->submenu = {
@@ -9,3 +12,5 @@ MenuItem* get_latex_ptr(){
     };
     return latex_ptr;
 }
+
+#endif
