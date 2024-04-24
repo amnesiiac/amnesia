@@ -4,7 +4,8 @@
 #include <iostream>
 #include <locale.h>   // setlocal
 
-#include "menuitem.h"
+// #include "menuitem.h"
+#include "menu.h"
 #include "form.h"     // subwin enable quick selection according to user input
 #include "popup.h"    // new popup win that show related file content in man dir
 #include "leven.h"    // levenshtein distance

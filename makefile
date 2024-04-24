@@ -1,5 +1,5 @@
 CXX=g++
-CFLAGS=-g -Wall -std=c++11 -pthread -w
+CFLAGS=-g -Wall -std=c++11 -pthread -w -I$(CURDIR)/menu
 OUT=out
 
 SUBDIR=$(shell ls -d */)
