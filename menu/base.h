@@ -10,14 +10,7 @@ struct MenuItem{
     std::vector<MenuItem> submenu;
 };
 
-class Method{
-public:
-    MenuItem* get_mac_ptr();
-    MenuItem* get_transhell_ptr();
-    MenuItem* get_latex_ptr();
-    MenuItem* get_gnu_ptr();
-    MenuItem* get_blog_ptr();
-};
+class Method;
 
 class MenuBuilder{  // singleton
 private:

@@ -45,9 +45,26 @@ Here is how you would transplant a topic branch based on one branch to another,
 to pretend that you forked the topic branch from the latter branch, using rebase --onto.
 
 
-code in action 
---------------
-ref: rebornlinux/docs/readme -> how to rebase code from upstream
+how to rebase local with upstream
+---------------------------------
+the following is about dev a code with some upstream reliance, while sometimes we
+need to rebase our local changes onto the recent upstream fixes.
+
+master branch: the branch cloned from upstream (typically obsolete ref to remote repo).
+main branch: the branch maintained based on some revision from master branch (local changeset on it).
+
+```text
+$ cd ${path_to_your_own_repo}
+
+$ git remote add ${origin_of_upstream_repo} ${https://github.com/xxxx/xxxx.git}  # add upstream as old_origin
+$ git checkout ${mater_branch}                                                   # master branch is for tracking upstream
+$ git pull ${origin_for_upstream_repo} ${mater_branch}                           # fetch & update local master branch from old_origin
+
+$ git checkout ${main_branch}                                                    # back to local main branch
+$ git rebase ${mater_branch}                                                     # do rebase with master, handle conflicts
+                                                                                 # do enough tests for local behavior
+$ git push -f ${origin_for_local_repo} ${main_branch}                            # force push, be careful
+```
 
 
 forcibly update the commit message of a series of commits already in remote repo

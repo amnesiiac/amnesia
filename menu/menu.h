@@ -7,7 +7,17 @@
 #include "blog.h"
 #include "latex.h"
 #include "gnu.h"
+#include "revision.h"
 
+class Method{
+public:
+    MenuItem* get_mac_ptr();
+    MenuItem* get_transhell_ptr();
+    MenuItem* get_latex_ptr();
+    MenuItem* get_gnu_ptr();
+    MenuItem* get_blog_ptr();
+    MenuItem* get_revision_ptr();
+};
 
 MenuItem* initdata(){
     std::map<std::string, MenuItem* (Method::*)()> method_map;
@@ -17,6 +27,7 @@ MenuItem* initdata(){
     method_map["latex"] = &Method::get_latex_ptr;
     method_map["gnu"] = &Method::get_gnu_ptr;
     method_map["blog"] = &Method::get_blog_ptr;
+    method_map["revision"] = &Method::get_revision_ptr;
 
     Method mlib;
     std::vector<MenuItem*> menus;
