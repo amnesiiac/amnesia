@@ -8,26 +8,37 @@
 #include "latex.h"
 #include "gnu.h"
 #include "revision.h"
+#include "network.h"
+#include "downloader.h"
+#include "docker.h"
+#include "filesys.h"
+#include "dev.h"
+#include "sysmonitor.h"
+#include "search.h"
+#include "user.h"
+#include "vim.h"
+#include "tmux.h"
 
-class Method{
-public:
-    MenuItem* get_mac_ptr();
-    MenuItem* get_transhell_ptr();
-    MenuItem* get_latex_ptr();
-    MenuItem* get_gnu_ptr();
-    MenuItem* get_blog_ptr();
-    MenuItem* get_revision_ptr();
-};
 
 MenuItem* initdata(){
     std::map<std::string, MenuItem* (Method::*)()> method_map;
 
     method_map["mac"] = &Method::get_mac_ptr;
+    method_map["blog"] = &Method::get_blog_ptr;
     method_map["transhell"] = &Method::get_transhell_ptr;
     method_map["latex"] = &Method::get_latex_ptr;
     method_map["gnu"] = &Method::get_gnu_ptr;
-    method_map["blog"] = &Method::get_blog_ptr;
     method_map["revision"] = &Method::get_revision_ptr;
+    method_map["network"] = &Method::get_network_ptr;
+    method_map["downloader"] = &Method::get_downloader_ptr;
+    method_map["docker"] = &Method::get_docker_ptr;
+    method_map["filesys"] = &Method::get_filesys_ptr;
+    method_map["dev"] = &Method::get_dev_ptr;
+    method_map["sysmonitor"] = &Method::get_sysmonitor_ptr;
+    method_map["search"] = &Method::get_search_ptr;
+    method_map["user"] = &Method::get_user_ptr;
+    method_map["vim"] = &Method::get_vim_ptr;
+    method_map["tmux"] = &Method::get_tmux_ptr;
 
     Method mlib;
     std::vector<MenuItem*> menus;

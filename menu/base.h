@@ -10,7 +10,25 @@ struct MenuItem{
     std::vector<MenuItem> submenu;
 };
 
-class Method;
+class Method{
+public:
+    MenuItem* get_mac_ptr();
+    MenuItem* get_blog_ptr();
+    MenuItem* get_transhell_ptr();
+    MenuItem* get_latex_ptr();
+    MenuItem* get_gnu_ptr();
+    MenuItem* get_revision_ptr();
+    MenuItem* get_network_ptr();
+    MenuItem* get_downloader_ptr();
+    MenuItem* get_docker_ptr();
+    MenuItem* get_filesys_ptr();
+    MenuItem* get_dev_ptr();
+    MenuItem* get_sysmonitor_ptr();
+    MenuItem* get_search_ptr();
+    MenuItem* get_user_ptr();
+    MenuItem* get_vim_ptr();
+    MenuItem* get_tmux_ptr();
+};
 
 class MenuBuilder{  // singleton
 private:
