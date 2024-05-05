@@ -15,9 +15,20 @@
 #include "dev.h"
 #include "sysmonitor.h"
 #include "search.h"
+#include "ssh.h"
 #include "user.h"
 #include "vim.h"
 #include "tmux.h"
+#include "hardware.h"
+#include "code.h"
+#include "cicd.h"
+#include "crontab.h"
+#include "os.h"
+#include "kernel.h"
+#include "time_.h"
+#include "tool.h"
+#include "encryption.h"
+#include "performance.h"
 
 
 MenuItem* initdata(){
@@ -25,6 +36,9 @@ MenuItem* initdata(){
 
     method_map["mac"] = &Method::get_mac_ptr;
     method_map["blog"] = &Method::get_blog_ptr;
+    method_map["code"] = &Method::get_code_ptr;
+    method_map["cicd"] = &Method::get_cicd_ptr;
+    method_map["crontab"] = &Method::get_crontab_ptr;
     method_map["transhell"] = &Method::get_transhell_ptr;
     method_map["latex"] = &Method::get_latex_ptr;
     method_map["gnu"] = &Method::get_gnu_ptr;
@@ -36,9 +50,17 @@ MenuItem* initdata(){
     method_map["dev"] = &Method::get_dev_ptr;
     method_map["sysmonitor"] = &Method::get_sysmonitor_ptr;
     method_map["search"] = &Method::get_search_ptr;
+    method_map["ssh"] = &Method::get_ssh_ptr;
     method_map["user"] = &Method::get_user_ptr;
     method_map["vim"] = &Method::get_vim_ptr;
     method_map["tmux"] = &Method::get_tmux_ptr;
+    method_map["hardware"] = &Method::get_hardware_ptr;
+    method_map["os"] = &Method::get_os_ptr;
+    method_map["kernel"] = &Method::get_kernel_ptr;
+    method_map["time"] = &Method::get_time_ptr;
+    method_map["tool"] = &Method::get_tool_ptr;
+    method_map["encryption"] = &Method::get_encryption_ptr;
+    method_map["performance"] = &Method::get_performance_ptr;
 
     Method mlib;
     std::vector<MenuItem*> menus;

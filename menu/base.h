@@ -14,6 +14,9 @@ class Method{
 public:
     MenuItem* get_mac_ptr();
     MenuItem* get_blog_ptr();
+    MenuItem* get_code_ptr();
+    MenuItem* get_cicd_ptr();
+    MenuItem* get_crontab_ptr();
     MenuItem* get_transhell_ptr();
     MenuItem* get_latex_ptr();
     MenuItem* get_gnu_ptr();
@@ -25,9 +28,17 @@ public:
     MenuItem* get_dev_ptr();
     MenuItem* get_sysmonitor_ptr();
     MenuItem* get_search_ptr();
+    MenuItem* get_ssh_ptr();
     MenuItem* get_user_ptr();
     MenuItem* get_vim_ptr();
     MenuItem* get_tmux_ptr();
+    MenuItem* get_hardware_ptr();
+    MenuItem* get_os_ptr();
+    MenuItem* get_kernel_ptr();
+    MenuItem* get_time_ptr();
+    MenuItem* get_tool_ptr();
+    MenuItem* get_encryption_ptr();
+    MenuItem* get_performance_ptr();
 };
 
 class MenuBuilder{  // singleton
