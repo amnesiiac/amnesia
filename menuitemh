@@ -13,7 +13,6 @@ MenuItem* initdata(){
     MenuItem *menu_ptr = new MenuItem;
     menu_ptr->name = "Main Menu";
     menu_ptr->submenu = {
-        {"downloader +", {{"curl +", {{""}}}}},
         {"ls series +", {{"ls +", {{"show list of file/dir in human readble format (newest modified the first)#ls -lht#"},
                                    {"show list of file/dir in human readble format (oldest modified the first)#ls -lhtr#"},
                                    {"show list of file/dir in a table format#ls | column -c ${num_item_each_row}#"},
@@ -22,20 +21,6 @@ MenuItem* initdata(){
                                      {"show network files in all addr (use portnum not portname)#sudo lsof -i -P#"}}},
                          {"lsns +", {{"show manual for format system namespace output#man lsns#"},
                                      {"list system namespaces#lsns -l#"}}}}},
-        {"vim +", {{"nvim img +", {{"edit nvim dockerfile#nvim /Users/mac/nvim/Dockerfile#"},
-                                   {"build nvim image##"},
-                                   {"invoke nvim image by script##"}}},
-                   {"vim cmd +", {{"create & edit a new copy of current file: new.log#:sav new.log#"},
-                                  {"create a new file using a range of lines#:{linestart},${lineend}w ${out.file}#"}}},
-                   {"regex match +", {{"search instance match pattern (start with lib, arbitary char in middle, end with tar.gz)#:g/lib.*tar.gz#"},
-                                      {"search instance match pattern in line range#/\%>9l\%<33llib.*tar.gz#"},
-                                      {"search instance match pattern in line range (press no to navi)#:10,32s/lib.*tar.gz//gc#"},
-                                      {"match lines does not contain the word foo#/^\(\(.*foo.*\)\@!.\)*$#"},
-                                      {"match lines does not contain certain pattern#/^\(\(.*lib.*tar.gz.*\)\@!.\)*$#"},
-                                      {"show lines does not contain certain pattern#:g!/lib.*tar.gz/p#"},
-                                      {"show lines ccontain certain pattern#:g/lib.*tar.gz/p#"},
-                                      {"delete all lines match pattern#:g/lib.*tar.gz/d#"},
-                                      {"delete all lines does not match pattern#:g!/lib.*tar.gz/d#"}}}}},
         {"kill proc +", {{"kill +"},
                          {"pkill +", {{"kill all processes with name exactly match the pattern#pkill -f ${pattern}#"}}}}},
         {"data serialization +", {{"json +"},

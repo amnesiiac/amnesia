@@ -1,5 +1,17 @@
+how to add a user with sudo/doas privileges
+-------------------------------------------
+```text
+$ adduser melon                                          # prompt for passwd
+$ adduser melon wheel                                    # add into linux wheel group
+$ apk update && apk add doas
+$ echo 'permit persist :wheel' >> /etc/doas.d/doas.conf
+```
+ref: https://wiki.alpinelinux.org/wiki/Setting_up_a_new_user
+
+
 check whether gitlab-runner can run docker cmd
 ----------------------------------------------
+```text
 $ sudo usermod -aG docker gitlab-runner     # add user gitlab-runner into docker group
 $ sudo -u gitlab-runner -H docker info      # switch to gitlab-runner user with $HOME=/home/gitlab-runner to run docker info
   Client:
@@ -15,5 +27,5 @@ $ sudo -u gitlab-runner -H docker info      # switch to gitlab-runner user with 
    Server Version: 20.10.21
    Storage Driver: overlay2
   ...
-
-thus the we could see, in the view from gitlab-runner, docker is available.
+```
+thus, in the view from gitlab-runner, docker is available.

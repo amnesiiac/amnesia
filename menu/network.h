@@ -77,6 +77,8 @@ MenuItem* Method::get_network_ptr(){
                        {"show active tcp/udp listening sockets (numerical)#netstat -tu -pnl#"},
                        {"show all tcp/udp sockets (numerical)#netstat -tu -pna#"},
                        {"show statistics of pkts of each itf#netstat -i#"}}},
+        {"nc +", {{"show connection ip:port status info (zero I/O mode)#nc -zv ${ip}:${port}#"}}},
+        {"ncat +", {{"listening on incoming tcp4 connections, maintain a que to accept multiple connections (as a server)#ncat -lk4 ${ip} ${port}#"}}},
         {"nsenter +", {{"show manual for nsenter#man nsenter#"},
                        {"enter into netns of pid, run cmd in that netns#sudo nsenter --target ${pid} --net ${ip link show}#"},
                        {"enter into netns of pid, display listening program-sock info#sudo nsenter --target ${pid} --net netstat -pnl#"},
@@ -95,7 +97,8 @@ MenuItem* Method::get_network_ptr(){
                       {"capture pkts of certain proto from a itf (tcp/udp/icmp...)#tshark -i ${interface} ${proto}#"},
                       {"capture 2 pkts content filtered by involving ip through eth0#tshark -i eth0 -x -c 2 -f 'host 192.168.0.20'#"},
                       {"dump pkts from a itf to pcap file#tshark -w output.pcap -i eth0#"},
-                      {"read pkts content in pcap files#tshark -r output.pcap#"}}}}},
+                      {"read pkts content in pcap files#tshark -r output.pcap#"}}},
+        {"termshark +", {{"todo#...#"}}}}},
     };
     return network_ptr;
 }

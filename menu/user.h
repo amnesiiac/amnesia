@@ -9,6 +9,7 @@ MenuItem* Method::get_user_ptr(){
     user_ptr->submenu = {
         {"su/sudo/id/user/groups +", {
             {"su +"},
+            {"doas +", {{"*add user with doas privilege in alpine#see desc pages for details#su_sudo"}}},
             {"sudo +", {{"run cmd as another user with $HOME set as /home/anotheruser before cmd run#sudo -u ${another user} -H ${cmd}#su_sudo"}}},
             {"user +", {{"show certain user info#id ${username}#"},
                         {"add a user#sudo useradd ${username}#"},
