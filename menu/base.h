@@ -39,6 +39,7 @@ public:
     MenuItem* get_tool_ptr();
     MenuItem* get_encryption_ptr();
     MenuItem* get_performance_ptr();
+    MenuItem* get_process_ptr();
 };
 
 class MenuBuilder{  // singleton

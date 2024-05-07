@@ -21,8 +21,6 @@ MenuItem* initdata(){
                                      {"show network files in all addr (use portnum not portname)#sudo lsof -i -P#"}}},
                          {"lsns +", {{"show manual for format system namespace output#man lsns#"},
                                      {"list system namespaces#lsns -l#"}}}}},
-        {"kill proc +", {{"kill +"},
-                         {"pkill +", {{"kill all processes with name exactly match the pattern#pkill -f ${pattern}#"}}}}},
         {"data serialization +", {{"json +"},
                                   {"yaml +", {{"*multiline string in yaml##yaml"}}}}},
     };

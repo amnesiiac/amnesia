@@ -29,6 +29,7 @@
 #include "tool.h"
 #include "encryption.h"
 #include "performance.h"
+#include "process.h"
 
 
 MenuItem* initdata(){
@@ -61,6 +62,7 @@ MenuItem* initdata(){
     method_map["tool"] = &Method::get_tool_ptr;
     method_map["encryption"] = &Method::get_encryption_ptr;
     method_map["performance"] = &Method::get_performance_ptr;
+    method_map["process"] = &Method::get_process_ptr;
 
     Method mlib;
     std::vector<MenuItem*> menus;
