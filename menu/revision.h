@@ -21,6 +21,7 @@ MenuItem* Method::get_revision_ptr(){
                                         {"get only a specific branch from remote#git clone -b ${branch} git@github.com:${project}.git#"}}},
                        {"git diff +", {{"show diff between wkdir vs staged#git diff#"},
                                        {"show diff between wkdir vs staged with colored text#git diff --color#"},
+                                       {"show diff between wkdir vs staged without file deletions included#git diff --diff-filter=d#"},
                                        {"show diff between wkdir vs staged with colored word-by-word diff#git diff --color-words#"},
                                        {"show diff between staged vs committed#git diff --staged#"},
                                        {"show diff between any selected 2 files#git diff --no-index ${file1} ${file2}#"}}},
