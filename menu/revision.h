@@ -146,7 +146,7 @@ MenuItem* Method::get_revision_ptr(){
                                                {"backout middle revision, merge needed#hg backout -r ${midrev}#"}}},
                              {"hg status +", {{"show changed files of certain revision#hg status --change ${rev}#"},
                                               {"show changed files of wkdir with certain revision#hg status --rev ${rev}#"},
-                                              {"remove all untacked file/dir#hg status --unknown --no-status | xargs rm -rf#"}}},
+                                              {"remove all untacked file/dir#cd project rootdir && hg status --unknown --no-status | xargs rm -rf#"}}},
                              {"hg log + (commit info)", {{"show recent num commits#hg log -l ${num}#"},
                                                          {"show commit msg of a revision#hg log -r ${rev}#"},
                                                          {"show commit msg of revision verbosely#hg log -r ${rev} -v#"},
