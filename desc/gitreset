@@ -1,8 +1,8 @@
 examples to git reset command series
 ====================================
 
-set local worktree as certain commit & do some test & reset changesets back to local
-------------------------------------------------------------------------------------
+set local worktree as certain commit & do some test & reset changesets back to state before local test
+------------------------------------------------------------------------------------------------------
 #1: init state when do "git clone https://github.com/twistfatezz/ISEnet.git" 
   $ git log --graph --oneline --decorate
   * c5d06c7 (HEAD, origin/master, origin/HEAD, master) update readme
@@ -42,7 +42,10 @@ set local worktree as certain commit & do some test & reset changesets back to l
   
       update readme
 
-#5: git merge to merge "deleted/incoming" commit to wkdir
+#5: reset local workdir back as before
+  $ git reset --hard ${revision_before_test}
+
+#6(optional): git merge to merge "deleted/incoming" commit to wkdir
   $ git merge                                                       # merge.defaultToUpstream is set to true since git2.0
   fatal: No commit specified and merge.defaultToUpstream not set.   # default upstream not set, git config merge.defaultToUpstream true
   
