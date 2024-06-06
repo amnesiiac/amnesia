@@ -9,6 +9,7 @@ MenuItem* Method::get_os_ptr(){
     os_ptr->submenu = {
         {"os +", {
             {"alpine +", {
+                {"release#cat /etc/os-release#"},
                 {"apk official doc site#https://wiki.alpinelinux.org/wiki/Main_Page#"},
                 {"apk info +", {{"show all installed apk#apk info#"},
                                 {"show all installed apk with 1line desc#apk -vv info#"},
@@ -22,8 +23,10 @@ MenuItem* Method::get_os_ptr(){
                               {"#rc-service#"}}}},
             },
             {"centos +", {
+                {"release#cat /etc/os-release#"},
                 {"pkg +",{{"show info about a pkg (arch, version, install or not, size...)#yum info ${package_name}#"},
-                          {"show version of a pkg#rpm -q ${package_name}#"}}}}}},
+                          {"show version of a pkg#rpm -q ${package_name}#"}}}}},
+            {"ubuntu +", {{"release#cat /etc/os-release#"}}}},
         },
     };
     return os_ptr;

@@ -1,3 +1,4 @@
+0) todo: how to debug shuttle app logic hehavior --> get some log output to file?
 1) todo: when no test file to show, then no popup window action made, just stay there:
    detect the first char if *, then popup, or nothing to do.
 2) todo: add help pages for showing how to control the shuttle panel.
