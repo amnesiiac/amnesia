@@ -16,7 +16,8 @@ MenuItem* Method::get_performance_ptr(){
                               {"record PMU event stat of binary executable at certain sampling rate#perf record -F 4000 -g -o perf.data ./out#"}}},
                 {"report +", {{"report call-graph for generated perf file with statistics#perf report --stdio -ng#"}}},
                 {"script +", {{"generate flamegreph using perf.data output#perf script | ./stackcollapse-perf.pl | ./flamegraph.pl > flame.svg#"}}}}},
-            {"top +", {{"give a snapshot for all processes of current user#top -bn1 -u $(id -u)#"}}},
+            {"top +", {{"setup top display interval#top -d ${interval}#"},
+                       {"give a snapshot for all processes of current user#top -bn1 -u $(id -u)#"}}},
             {"memory +", {
                 {"free +", {{"show manual#man free#"},
                             {"show [total, used, free, shared, buff/cache, available]#free -h#"},
