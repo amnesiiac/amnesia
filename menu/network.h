@@ -77,6 +77,7 @@ MenuItem* Method::get_network_ptr(){
                        {"show active tcp/udp listening sockets (numerical)#netstat -tu -pnl#"},
                        {"show all tcp/udp sockets (numerical)#netstat -tu -pna#"},
                        {"show statistics of pkts of each itf#netstat -i#"}}},
+        {"conntrack +", {{"list established connection info: ip/port for dst/src#conntrack -L#"}}},
         {"nc +", {{"show connection ip:port status info (zero I/O mode)#nc -zv ${ip}:${port}#"}}},
         {"ncat +", {{"listening on incoming tcp4 connections, maintain a que to accept multiple connections (as a server)#ncat -lk4 ${ip} ${port}#"}}},
         {"nsenter +", {{"show manual for nsenter#man nsenter#"},
