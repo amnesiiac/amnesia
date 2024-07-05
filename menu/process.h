@@ -13,9 +13,10 @@ MenuItem* Method::get_process_ptr(){
             {"pstree +"},
             {"cpu affinity +", {{"get certain proc's cpu affinity#taskset#"}}},
             {"procfs +", {{"show the cmdline that start the process#cat /proc/${pid}/cmdline#"},
-                        {"show the status of a process (todo: explanation needed)#cat /proc/${pid}/status#"}}},
-            {"kill proc +", {
-                {"kill +"},
+                          {"show the status of a process (todo: explanation needed)#cat /proc/${pid}/status#"}}},
+            {"kill +", {
+                {"kill +", {{"stop execution of certain process#kill -SIGSTOP ${pid}#"},
+                            {"continue execution of certain process#kill -SIGCONT ${pid}#"}}},
                 {"pkill +", {
                     {"kill all processes with name exactly match the pattern#pkill -f ${pattern}#"}}}}}},
         },
