@@ -30,7 +30,10 @@ MenuItem* Method::get_gnu_ptr(){
                 {"delete all files without input yes for each possible file#yes | rm -i *.txt#"},
                 {"write duplicate lines of string into file#yes ${string} | head -n 10 > ${file}#"},
                 {"*use yes with pipe to enable auto input for interactive prompt (set +o pipefail)#yes | ${interactive_cmd}#yes"},
-                {"*use yes with pipe to enable auto input for interactive prompt (set -o pipefail)#{ yes || :; } | ${interactive_cmd}#yes"}}}}
+                {"*use yes with pipe to enable auto input for interactive prompt (set -o pipefail)#{ yes || :; } | ${interactive_cmd}#yes"}}},
+            {"tty +", {{"show brief login info for current terminal: user tty logintime hostname#who am i#"},
+                       {"show brief login info: user tty logintime hostname#who#"},
+                       {"show detailed login info: user tty login-date idle-time jcpu-time pcpu-time process#w#"}}}}
         },
     };
     return gnu_ptr;
