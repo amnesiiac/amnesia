@@ -27,7 +27,9 @@ MenuItem* Method::get_os_ptr(){
                 {"pkg +",{{"show info about a pkg (arch, version, install or not, size...)#yum info ${package_name}#"},
                           {"show version of a pkg#rpm -q ${package_name}#"}}}}},
             {"ubuntu +", {{"release#cat /etc/os-release#"}}},
-            {"windows +", {{"notepad +", {{"undo last action#ctrl+z#"},
+            {"windows +", {{"shutdown +", {{"show help info about shutdown command options#shutdown#"},
+                                           {"abort a system shutdown during timeout (for postpone reboot for sw updates)#shutdown -a#"}}},
+                           {"notepad +", {{"undo last action#ctrl+z#"},
                                           {"redo last action#ctrl+y#"}}}}}},
         },
     };
