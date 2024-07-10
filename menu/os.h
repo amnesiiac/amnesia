@@ -26,7 +26,9 @@ MenuItem* Method::get_os_ptr(){
                 {"release#cat /etc/os-release#"},
                 {"pkg +",{{"show info about a pkg (arch, version, install or not, size...)#yum info ${package_name}#"},
                           {"show version of a pkg#rpm -q ${package_name}#"}}}}},
-            {"ubuntu +", {{"release#cat /etc/os-release#"}}}},
+            {"ubuntu +", {{"release#cat /etc/os-release#"}}},
+            {"windows +", {{"notepad +", {{"undo last action#ctrl+z#"},
+                                          {"redo last action#ctrl+y#"}}}}}},
         },
     };
     return os_ptr;
