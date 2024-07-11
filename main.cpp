@@ -29,11 +29,10 @@ using std::endl;
 #define MAX_MENUSTRLEN 36   // max len of menu string (trunc the left)
 
 // execute shell cmd: echo "cmd" | pbcopy
-char* execute_command(const char *command){
+char* execute_command(const char* command){
     char buffer[128];
-    char *result = static_cast<char*>(malloc(1));
-    result[0] = '\0';
-    FILE *pipe = popen(command, "r");
+    char* result = static_cast<char*>(malloc(1)); result[0] = '\0';
+    FILE* pipe = popen(command, "r");
     if(pipe == nullptr){
         return result;
     }
@@ -86,7 +85,7 @@ inline string trunc_menu_header(string headstr){
 }
 
 // dump "layer -> menus" info to result (only available when memu layer changes)
-void getlayout(map<int, vector<string>> &res, MenuItem *ptr, int layer, int limit,
+void getlayout(map<int, vector<string>> &res, MenuItem* ptr, int layer, int limit,
                vector<int> &highlight){
     if(ptr!=nullptr){
         if(res.find(layer)!=res.end()){
@@ -120,7 +119,7 @@ void getlayout(map<int, vector<string>> &res, MenuItem *ptr, int layer, int limi
 }
 
 // print text according to (x,y)
-void print_menu(WINDOW *menu_win, int x, int y, int active_layer, vector<int> &highlight,
+void print_menu(WINDOW* menu_win, int x, int y, int active_layer, vector<int> &highlight,
                 map<int, vector<string>> &res){
     box(menu_win, 0, 0);
     string headstr, trunc_headstr;
@@ -159,7 +158,7 @@ int main(){
     setlocale(LC_ALL, "");
 
     // menu data intake
-    MenuItem *ptr = initdata();
+    MenuItem* ptr = initdata();
 
     // init state
     int startlayer=0;
@@ -187,7 +186,7 @@ int main(){
     cbreak();
 
     // init ncurse menu win
-    WINDOW *menu_win;
+    WINDOW* menu_win;
     menu_win = newwin(WINHEIGHT, WINWIDTH, WINSTART_Y, WINSTART_X);
     keypad(menu_win, TRUE);
     // mvprintw(0, 0, "Arrow keys to go up/down. Press enter to select.");
@@ -306,7 +305,7 @@ int main(){
     cmd = echo + quote + cmd + quote + tr + pbcopy;
 
     // shell cmd execute
-    char *output = execute_command(cmd.c_str());
+    char* output = execute_command(cmd.c_str());
     free(output);
 
     // clean all & close win
