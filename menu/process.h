@@ -8,7 +8,8 @@ MenuItem* Method::get_process_ptr(){
     process_ptr->name = "process";
     process_ptr->submenu = {
         {"process +", {
-            {"ps +", {{"show parent proc id (ppid) of given pid#ps j ${pid}#"},
+            {"ps +", {{"show all process info of certain user#ps -u ${userid}#"},
+                      {"show parent proc id (ppid) of given pid#ps j ${pid}#"},
                       {"show full cmdline for a proc#ps -ef | grep ${pid} | awk '{ for(i=${col}; i<=NF; i++) printf \"%s \", $i; print \"\" }'#"}}},
             {"pstree +"},
             {"cpu affinity +", {{"get certain proc's cpu affinity#taskset#"}}},
