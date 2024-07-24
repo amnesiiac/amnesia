@@ -11,6 +11,8 @@ MenuItem* Method::get_process_ptr(){
             {"ps +", {{"show all process#ps aux#"},
                       {"show all process with their executable binary paths#ps -ef#"},
                       {"show all process info of certain user#ps -u ${userid}#"},
+                      {"show info of certain process by pid#ps --pid ${pid}#"},
+                      {"show desired ifno of certain process by pid# ps -o pid,comm,user,state,rss --pid ${pid}#"},
                       {"show parent proc id (ppid) of given pid#ps j ${pid}#"},
                       {"show full cmdline for a proc#ps -ef | grep ${pid} | awk '{ for(i=${col}; i<=NF; i++) printf \"%s \", $i; print \"\" }'#"}}},
             {"pstree +"},
