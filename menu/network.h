@@ -84,7 +84,7 @@ MenuItem* Method::get_network_ptr(){
                     {"list all namespaces#lsns -l#"},
                     {"list all namespaces info associated with certain process#lsns -l -p ${pid}#"}}},
         {"nsenter +", {{"show manual for nsenter#man nsenter#"},
-                       {"enter netns by name, enter bash asociated with that netns#nsenter --net=/var/run/netns/${netns_name} bash#"}，
+                       {"enter netns by name, enter bash asociated with that netns#nsenter --net=/var/run/netns/${netns_name} bash#"},
                        {"enter netns associated with pid, run net related cmd in that netns#sudo nsenter --target ${pid} --net ${some_net_cmd}#"},
                        {"enter netns associated with pid, display listening program-sock info#sudo nsenter --target ${pid} --net netstat -pnl#"},
                        {"enter netns associated with pid, display all program-sock info#sudo nsenter --target ${pid} --net netstat -pna#"}}},
