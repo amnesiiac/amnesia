@@ -8,11 +8,12 @@ MenuItem* Method::get_filesys_ptr(){
     filesys_ptr->name = "filesys";
     filesys_ptr->submenu = {
         {"file & filesystem +", {
-            {"file permissions +", {{"change owner:group +", {{"change owner:group recursively for dir/subdir#sudo chown -R ${owner}:${group} ${dir}#"}}},
-                                    {"change rwx +"}}},
-            {"file time +", {{"set file atime/mtime as date:time#touch -d ${date:-2023-11-22} ${time:-10:27:46} ${file}#"}}},
-            {"file type#file ${filename}#"},
-            {"remove file startwith hypen '-'#rm ./${-filename} or rm -- ${-filename}#"},
+            {"file operations +", {{"file permissions +", {{"change owner:group +", {{"change owner:group recursively for dir/subdir#sudo chown -R ${owner}:${group} ${dir}#"}}},
+                                                           {"change rwx +"}}},
+                                   {"file time +", {{"set file atime/mtime as date:time#touch -d ${date:-2023-11-22} ${time:-10:27:46} ${file}#"}}},
+                                   {"file type#file ${filename}#"}}},
+            {"remove file/dir +", {{"remove all except for certain object in certain dir#shopt -s extglob && rm -rf !(${folder or file name})#"},
+                                   {"remove file startwith hypen '-'#rm ./${-filename} or rm -- ${-filename}#"}}},
             {"ln +", {{"create symbolic link files#ln -s ${abspath_to_origin_file} ${path_to_target_link}#"}}},
             {"readlink +", {{"get 1 level deep softlink target of current file/dir#readlink ${softlink}#"},
                             {"get final end softlink target of current file/dir#readlink -f ${softlink}#"}}},
