@@ -1,0 +1,40 @@
+### # config the vncserver startup behavior
+the ~/.vnc/xstartup file is used to config startup behavior of vncserver.
+all the vncserver configurations need a restart to enable.
+
+1 for a simple xterm process to be shared with.
+
+```text
+#!/bin/sh
+
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+
+# start the terminal application (for example, xterm)
+xterm -geometry 1980x1080+10+10 -fa 'Courier New' -fs 14 -ls -title "$VNCDESKTOP Desktop" &
+
+# wait for the terminal application to start
+wait
+```
+
+<hr>
+
+2 for a normal display vnc server with full graphic feature shared.
+
+```text
+#!/bin/sh
+
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+
+/etc/X11/xinit/xinitrc
+
+# Assume either Gnome or KDE will be started by default when installed
+# We want to kill the session automatically in this case when user logs out. In case you modify
+# /etc/X11/xinit/Xclients or ~/.Xclients yourself to achieve a different result, then you should
+# be responsible to modify below code to avoid that your session will be automatically killed
+
+if [ -e /usr/bin/gnome-session -o -e /usr/bin/startkde ]; then
+    vncserver -kill $DISPLAY
+fi
+```
