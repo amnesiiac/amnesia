@@ -62,7 +62,8 @@ MenuItem* Method::get_docker_ptr(){
             {"mount +", {{"show docker container mount info formatted by jq#docker container inspect -f '{{json .Mounts}}' ${container_name/id} | jq#"}}},
             {"cache +", {{"remove all unused docker build cache#docker builder prune --all#"}}},
             {"file/dirs +", {{"copy file/dir from container to host#docker cp ${container_id}:${absolute_path} ${hostdir}#"},
-                             {"copy file/dir from host to container#docker cp ${hostdir} ${container_id}:${absolute_path}#"}}}}},
+                             {"copy file/dir from host to container#docker cp ${hostdir} ${container_id}:${absolute_path}#"}}},
+            {"restart +#systemctl restart docker#"}}},
     };
     return docker_ptr;
 }
