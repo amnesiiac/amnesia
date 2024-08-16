@@ -23,7 +23,10 @@ MenuItem* Method::get_process_ptr(){
                 {"kill +", {{"stop execution of certain process#kill -SIGSTOP ${pid}#"},
                             {"continue execution of certain process#kill -SIGCONT ${pid}#"}}},
                 {"pkill +", {
-                    {"kill all processes with name exactly match the pattern#pkill -f ${pattern}#"}}}}}},
+                    {"kill all processes with name exactly match the pattern#pkill -f ${pattern}#"}}}}},
+            {"capabilities +", {{"show manual of linux capabilities#man capabilities#"},
+                                {"setcap +"},
+                                {"getcap +"}}}},
         },
     };
     return process_ptr;
