@@ -96,6 +96,7 @@ MenuItem* Method::get_network_ptr(){
                        {"capture pkts, disable ip resolution (live)#tcpdump -n -i ${dev}#"},
                        {"capture pkts, disable ip/port resolution (live & verbose)#tcpdump -n -i ${dev} -vvnnXX#"},
                        {"capture pkts, keep max pkt size limit as 2048 bytes (live & verbose)#tcpdump -vvnnXX -s 2048 -i ${dev}#"},
+                       {"capture pkts, without verify checksum (sometime checksum offloading might report warning)#tcpdump -i ${dev} -vvnnXX --dont-verify-checksums#"},
                        {"capture pkts, dump to pcap file (only keep latest 4s data)#tcpdump -vvnnXX -i ${dev} -w out.pcap -G 4#"},
                        {"capture pkts, dump to pcap file (only keep latest 4Mb size)#tcpdump -vvnnXX -i ${dev} -w out.pcap -C 4#"},
                        {"capture pkts, dump to pcap file (only keep latest 4Mb size in 2 file)#tcpdump -vvnnXX -i ${dev} -w out.pcap -W 2 -C 4#"}}},
