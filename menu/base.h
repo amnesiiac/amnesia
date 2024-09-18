@@ -28,7 +28,6 @@ public:
     MenuItem* get_dev_ptr();
     MenuItem* get_sysmonitor_ptr();
     MenuItem* get_search_ptr();
-    MenuItem* get_ssh_ptr();
     MenuItem* get_user_ptr();
     MenuItem* get_vim_ptr();
     MenuItem* get_tmux_ptr();

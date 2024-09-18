@@ -61,6 +61,10 @@ MenuItem* Method::get_network_ptr(){
         {"dns +", {{"get ip for domain name (nslookup)#nslookup ${domain_name}#"},
                    {"get ip for domain name (dig)#dig ${domain_name}#"},
                    {"check nameserver config file#cat /etc/resolv.conf (see: https://linux.die.net/man/5/resolv.conf)#"}}},
+        {"traceroute +", {{"show manual#man traceroute#"},
+                          {"test route access to dst ip by sending tcp pkts#traceroute -T ${dst_ip}#"},
+                          {"test route access to dst ip by sending icmp pkts#traceroute -I ${dst_ip}#"},
+                          {"test route access to dst url by sending icmp pkts#traceroute ${dst_ip}#"}}},
         {"brctl +", {{"brctl show +", {{"show bridge general info#brctl show#"},
                                        {"show bridge info#brctl show ${bridge}#"},
                                        {"show bridge mac info#brctl showmacs ${bridge}#"},
@@ -110,7 +114,20 @@ MenuItem* Method::get_network_ptr(){
                       {"capture 2 pkts content filtered by involving ip through eth0#tshark -i eth0 -x -c 2 -f 'host 192.168.0.20'#"},
                       {"dump pkts from a itf to pcap file#tshark -w output.pcap -i eth0#"},
                       {"read pkts content in pcap files#tshark -r output.pcap#"}}},
-        {"termshark +", {{"todo#...#"}}}}},
+        {"termshark +", {{"todo#...#"}}},
+        {"ssh +", {
+            {"*ssh config#see desc/sshconfig for details#sshconfig"},
+            {"scp +", {
+                {"test ssh connection to github site without create new tty#ssh -T git@github.com#"},
+                {"download file from server to local#scp user@ip:${serverdir/file} ${localdir}#"},
+                {"upload file from local to server#scp ${localdir/file} user@ip:${serverdir}#"},
+                {"download dir from server to local under local dir#scp -r user@ip:${serverdir} ${localdir}#"},
+                {"upload dir from local to server under serverdir#scp -r ${localdir} user@ip:${serverdir}#"}}}},
+        },
+        {"telnet +", {{"show manual#man telnet#"},
+                      {"use telnet proto over tcp to setup connection with another host end#telnet ${dst_ip} ${dst_port}#"},
+                      {"force use telnet proto over tcp4 for connection#telent -4 ${dst_ip} ${dst_port}#"},
+                      {"force use telnet proto over tcp6 for connection#telent -6 ${dst_ip} ${dst_port}#"}}}}},
     };
     return network_ptr;
 }

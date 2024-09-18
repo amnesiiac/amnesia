@@ -15,7 +15,6 @@
 #include "dev.h"
 #include "sysmonitor.h"
 #include "search.h"
-#include "ssh.h"
 #include "user.h"
 #include "vim.h"
 #include "tmux.h"
@@ -51,7 +50,6 @@ MenuItem* initdata(){
     method_map["dev"] = &Method::get_dev_ptr;
     method_map["sysmonitor"] = &Method::get_sysmonitor_ptr;
     method_map["search"] = &Method::get_search_ptr;
-    method_map["ssh"] = &Method::get_ssh_ptr;
     method_map["user"] = &Method::get_user_ptr;
     method_map["vim"] = &Method::get_vim_ptr;
     method_map["tmux"] = &Method::get_tmux_ptr;
