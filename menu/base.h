@@ -36,6 +36,7 @@ public:
     MenuItem* get_kernel_ptr();
     MenuItem* get_time_ptr();
     MenuItem* get_tool_ptr();
+    MenuItem* get_term_ptr();
     MenuItem* get_encryption_ptr();
     MenuItem* get_performance_ptr();
     MenuItem* get_process_ptr();
@@ -52,7 +53,7 @@ public:
 };
 
 MenuItem* MenuBuilder::buildmenu(const std::vector<MenuItem*>& menus){
-	static MenuItem menu;
+    static MenuItem menu;
     static MenuItem* local_menu_ptr = &menu;  // global unique
     local_menu_ptr->name = "Main Menu";
     local_menu_ptr->submenu = {};

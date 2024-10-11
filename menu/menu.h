@@ -26,6 +26,7 @@
 #include "kernel.h"
 #include "time_.h"
 #include "tool.h"
+#include "term.h"
 #include "encryption.h"
 #include "performance.h"
 #include "process.h"
@@ -46,8 +47,8 @@ MenuItem* initdata(){
     method_map["network"] = &Method::get_network_ptr;
     method_map["downloader"] = &Method::get_downloader_ptr;
     method_map["docker"] = &Method::get_docker_ptr;
-    method_map["filesys"] = &Method::get_filesys_ptr;
     method_map["dev"] = &Method::get_dev_ptr;
+    method_map["filesys"] = &Method::get_filesys_ptr;
     method_map["sysmonitor"] = &Method::get_sysmonitor_ptr;
     method_map["search"] = &Method::get_search_ptr;
     method_map["user"] = &Method::get_user_ptr;
@@ -58,6 +59,7 @@ MenuItem* initdata(){
     method_map["kernel"] = &Method::get_kernel_ptr;
     method_map["time"] = &Method::get_time_ptr;
     method_map["tool"] = &Method::get_tool_ptr;
+    method_map["term"] = &Method::get_term_ptr;
     method_map["encryption"] = &Method::get_encryption_ptr;
     method_map["performance"] = &Method::get_performance_ptr;
     method_map["process"] = &Method::get_process_ptr;
