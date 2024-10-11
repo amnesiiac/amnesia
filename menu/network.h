@@ -36,6 +36,8 @@ MenuItem* Method::get_network_ptr(){
                                         {"show certain itfs info#ip -c link show ${dev}#"},
                                         {"show itfs statistics#ip -s link#"},
                                         {"show certain itfs statistic#ip -s link show ${dev}#"}}}}},
+                {"ip tuntap +", {{"show help#ip tuntap help#"},
+                                 {"show available ip tuntaps#ip tuntap show#"}}},
                 {"ip route +", {{"ip route show +", {{"show netdev route info#ip route show dev ${dev}#"},
                                                      {"show all route info in neat format#ip route show | column '-t'#"}}},
                                 {"routel +", {{"show brief halp page#routel -h#"},
