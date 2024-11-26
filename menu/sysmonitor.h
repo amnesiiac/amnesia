@@ -13,7 +13,10 @@ MenuItem* Method::get_sysmonitor_ptr(){
                             {"delete all audit rules#sudo auditctl -D#"},
                             {"delete certain audit rules##"},
                             {"check all audit log#sudo vim /var/log/audit/audit.log#"}}},
-            {"inotify +"}},
+            {"inotify +", {{"install the inotify tools on centos linux#yum install inotify-tools#"},
+                           {"inotifywait +", {{"show manual#man inotifywait#"},
+                                              {"capture the first event happened on dir#inotifywait ${dir}#"},
+                                              {"monitor events on certain dir continuously#inotifywait -m ${dir}#"}}}}}},
         },
     };
     return sysmonitor_ptr;
