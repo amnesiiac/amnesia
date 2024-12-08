@@ -16,7 +16,7 @@ MenuItem* Method::get_tool_ptr(){
                        {"vncpasswd +", {{"show manual#man vncpasswd#"},
                                         {"interatively setup login passwd for vnc#vncpasswd#"}}},
                        {"vncserver +", {{"show manual#man vncserver#"},
-                                        {"startup vnc server by a given id#vncserver :${uuid}#"},
+                                        {"startup vnc server by a given id (id: 1,2,3...)#vncserver :${id}#"},
                                         {"list all vnc server live#vncserver -list#"},
                                         {"kill a certain vnc server#vncserver -kill :${uuid}#"},
                                         {"*config the xstartup script & behavior#cd ~/.vnc/ && vim xstartup#vnc"}}}}}},
