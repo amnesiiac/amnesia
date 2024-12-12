@@ -10,8 +10,9 @@ MenuItem* Method::get_gnu_ptr(){
         {"gnu cmd +", {
             {"gnu tools manuals#https://www.gnu.org/manual/#"},
             {"sed +", {
-                {"get content within line range of [start,end] from file#sed -n '${start},${end}p' ${file}#"},
-                {"get content within line range of [start,start+incr] from file#sed -n '${start},+${incr}p' ${file}#"},
+                {"print lines to stdout with lineno in range of [start,end]#sed -n '${start},${end}p' ${file}#"},
+                {"print lines to stdout with lineno in range of [start,start+incr]#sed -n '${start},+${incr}p' ${file}#"},
+                {"derive lines match the pattern into out file#sed -n '/${pattern}/p' ${in} > ${out}#"},
                 {"delete lines from file +", {
                     {"delete lines with matched pattern in place (some chars need to be escaped)#sed -i '/${pattern}/d' ${file}#"},
                     {"delete line by lineno in place (lineno count start from 1)#sed -i '${lineno}d' ${file}#"},
