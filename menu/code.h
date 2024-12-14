@@ -64,7 +64,9 @@ MenuItem* Method::get_code_ptr(){
                              {"unset env variable for current shell#unset ${var}#"},
                              {"setup env variable for all shell#echo \"export ${var}=${val}\" >> ~/.bashrc && source ~/.bashrc#"}}},
                 {"c +"},
-                {"cpp +"}}
+                {"cpp +"},
+                {"json +"},
+                {"yaml +", {{"*multiline string in yaml##yaml"}}}}
             },
             {"debug +", {
                 {"gdb +", {{"show manual#http://www.yolinux.com/TUTORIALS/GDB-Commands.html#"},
