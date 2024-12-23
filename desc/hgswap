@@ -1,0 +1,31 @@
+swap the order of two commit in the same branch using rebase tool
+-----------------------------------------------------------------
+1 swap tip with tip-1
+
+
+    tip   @                               tip-1 @
+          |                                     |
+          |                                     |
+    tip-1 o  --->  tip-1 o   @ tip  --->  tip   o
+          |              |   |                  |
+          |              |   |                  |
+    tip-2 o        tip-2 o --+            tip-2 o
+          |              |                      |
+          |              |                      |
+
+
+
+2 swap tip with tip-n, e.g. 2
+
+    tip   @                                                        tip-2 @
+          |                                                              |
+          |                                                              |
+    tip-1 o  --->  tip-1 o                          @ tip-1        tip-1 o
+          |              |                          |                    |
+          |              |                          |                    |
+    tip-2 o        tip-2 o   @ tip  --->  tip-2 o   o tip    --->  tip   o
+          |              |   |                  |   |                    |
+          |              |   |                  |   |                    |
+    tip-3 o        tip-3 o---+            tip-3 o---+              tip-3 o
+          |              |                      |                        |
+          |              |                      |                        |
