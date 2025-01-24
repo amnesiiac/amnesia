@@ -23,6 +23,8 @@ MenuItem* Method::get_dev_ptr(){
             {"lshw +", {{"show hardware info in summary#lshw -short#"},
                         {"show hardware info in html format#lshw -html > lshw.html#"}}},
             {"memory +", {{"show memory info by reading dmi tables#dmidecode -t memory#"}}},
+            {"interrupt +", {{"show irq statistics for each core & all source#cat /proc/interrupts#"},
+                             {"show irq statistics for each core#cat /sys/kernel/irq/${irq_num}/per_cpu_count#"}}},
             {"system +", {{"show system info by reading dmi tables#dmidecode -t system#"}}},
             {"bios +", {{"show bios info by reading dmi tables#dmidecode -t bios#"}}},
             {"processor +", {{"show processor info by reading dmi tables#dmidecode -t processor#"}}}}},
