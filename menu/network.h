@@ -110,6 +110,7 @@ MenuItem* Method::get_network_ptr(){
                            {"capture pkts, dump to pcap file (only keep latest 4s data)#tcpdump -vvnnXX -i ${dev} -w out.pcap -G 4#"},
                            {"capture pkts, dump to pcap file (only keep latest 4Mb size)#tcpdump -vvnnXX -i ${dev} -w out.pcap -C 4#"},
                            {"capture pkts, dump to pcap file (only keep latest 4Mb size in 2 file)#tcpdump -vvnnXX -i ${dev} -w out.pcap -W 2 -C 4#"},
+                           {"capture pkts, filter out pkts by certain conditions#tcpdump -vvnnXX -i ${dev} \(src ${src_ip} and port ${src_port}\) or \(dst ${dst_ip} and port ${dst_port}\)#"},
                            {"dump info from pcap file#tcpdump -r ${pcap.file}#"}}},
             {"tshark +", {{"show itfs available to tshark#tshark -D#"},
                           {"capture the pkts from a itf#tshark -i ${interface}#"},
