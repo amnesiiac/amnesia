@@ -1,0 +1,64 @@
+%include $ASBGLOBALHGCFG
+%include $HGHOME/mercurial-scripts/configfiles/hgrc-default
+%include $HGHOME/mercurial-scripts/configfiles/obsolescence.rc
+%include $HGHOME/mercurial-scripts/configfiles/hgrc-base
+
+[ui]
+username = Bai Yingjie <yingjie.bai@nokia-sbell.com>
+verbose = True
+merge = vimdiff
+
+[merge-tools]
+vimdiff.executable = vim
+vimdiff.args = -d $base $local $output $other +close +close
+kdiff3.executable=/usr/bin/kdiff3
+kdiff3.args = $base $local $other -o $output
+kdiff3.priority = 1
+
+[extensions]
+color =
+hgext.extdiff =
+hgext.purge =
+hgext.graphlog =
+hgext.convert =
+pager =
+churn =
+hgext.mq =
+mq =
+rebase  =
+transplant =
+hgk =
+share =
+hgext.bookmarks =
+
+[pager]
+pager = LESS='FRX' less
+
+[extdiff]
+cmd.kompare =
+cmd.kdiff3 =
+cmd.vimdiff = vim
+opts.vimdiff = -f '+next' '+execute "DirDiff" argv(0) argv(1)'
+
+[alias]
+# show last 5 revisions
+latest = log --limit 5
+# graphical version of 'latest'. You have to enable the 'graphlog' extension in your [extensions] section.
+glatest = glog --style compact --limit=10
+qnew = qnew -UD
+# show compact list of recent revisions
+#ls = log --limit 36 --template '{rev} {node|short} {branch} {date|shortdate} {author|person} \t{desc|strip|firstline}\n'
+#lsa = log --template '{rev} {node|short} {branch} {date|shortdate} {author|person} \t{desc|strip|firstline}\n'
+ls = log --branch . --template oneline --limit 36
+lsa = log --template oneline
+
+# Show a diffstat starting from a certain revision
+diffstat = !hg log --stat -r $1::tip
+diffstat1 = !hg log --stat -r $1
+# Convenience shortcut combining 'hg in' / 'hg out'
+inout = !echo "[in]"; hg in $@; echo "[out]"; hg out $@
+rstatus = !hg status $($HG root) $HG_ARGS
+# Shows on which baseline a changeset has been implemented
+#hg base <changeset>
+# Shows on which MS the changeset has been dropped
+#hg drop <changeset>

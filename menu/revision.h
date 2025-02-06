@@ -108,6 +108,7 @@ MenuItem* Method::get_revision_ptr(){
 					  }},
             {"hg +", {{"hg help +", {{"show available hg format templates#hg help templates#"},
                                      {"show help page for hg subcommand(e.g. hg help diff)#hg help ${subcommand}#"}}},
+                      {"*set ~/.hgrc#hgrc content#hgrc"},
                       {"show path for remote repositories#hg path#"},
                       {"hg head +", {{"show all open head in current repo#hg head#"},
                                      {"show all descendant head from start revision#hg head -r ${rev}#"},
