@@ -31,7 +31,6 @@ public:
     MenuItem* get_user_ptr();
     MenuItem* get_vim_ptr();
     MenuItem* get_tmux_ptr();
-    MenuItem* get_hardware_ptr();
     MenuItem* get_os_ptr();
     MenuItem* get_kernel_ptr();
     MenuItem* get_time_ptr();

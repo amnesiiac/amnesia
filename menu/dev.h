@@ -7,7 +7,7 @@ MenuItem* Method::get_dev_ptr(){
     MenuItem* dev_ptr = new MenuItem;
     dev_ptr->name = "dev";
     dev_ptr->submenu = {
-        {"hardware & devices +", {
+        {"devices +", {
             {"lsblk +", {{"show help page & available column for lsblk to output#lsblk --help#"},
                          {"show block device info with full path displayed#lsblk -p#"},
                          {"show block device info with chosen column to display (available column & desc see help)#lsblk -o NAME,MOUNTPOINT#"}}},

@@ -8,6 +8,7 @@ MenuItem* Method::get_network_ptr(){
     network_ptr->name = "network";
     network_ptr->submenu = {
         {"network +", {
+            {"settings +", {{"show local network ip settings (default, loopback, link-local)#cat /etc/networks#"}}},
             {"ip +", {
                 {"ip addr +", {{"ip addr show +", {{"show netdev info including ip address#ip addr show ${dev}#"},
                                                    {"..."}}},

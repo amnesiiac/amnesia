@@ -18,7 +18,6 @@
 #include "user.h"
 #include "vim.h"
 #include "tmux.h"
-#include "hardware.h"
 #include "code.h"
 #include "cicd.h"
 #include "crontab.h"
@@ -54,7 +53,6 @@ MenuItem* initdata(){
     method_map["user"] = &Method::get_user_ptr;
     method_map["vim"] = &Method::get_vim_ptr;
     method_map["tmux"] = &Method::get_tmux_ptr;
-    method_map["hardware"] = &Method::get_hardware_ptr;
     method_map["os"] = &Method::get_os_ptr;
     method_map["kernel"] = &Method::get_kernel_ptr;
     method_map["time"] = &Method::get_time_ptr;
