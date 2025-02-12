@@ -13,7 +13,7 @@ MenuItem* Method::get_kernel_ptr(){
                                             {"show help page#dmesg --help#"},
                                             {"show kernel ring buffer log in certain log level (debug, info, notice...)#dmesg -l ${log level}#"},
                                             {"check kvm related msg (sometime lsmod show kvm ready, but kvm still not available)#dmesg | grep -i kvm#"}}}}},
-            {"procfs +", {{"min mem reserved for kernel critical allocations#cat /proc/sys/vm/min_free_kbytes#"}}},
+            {"procfs +", {{"min mem reserved for kernel critical allocation (add up all memzone watermarks)#cat /proc/sys/vm/min_free_kbytes#"}}},
         }},
     };
     return kernel_ptr;
