@@ -10,7 +10,9 @@ MenuItem* Method::get_user_ptr(){
         {"su/sudo/id/user/groups +", {
             {"su +"},
             {"doas +", {{"*add user with doas privilege in alpine#see desc pages for details#su_sudo"}}},
-            {"sudo +", {{"run cmd as another user with $HOME set as /home/anotheruser before cmd run#sudo -u ${another user} -H ${cmd}#su_sudo"}}},
+            {"sudo +", {{"exec cmd in sudo prior (env var like proxy are discarded)#sudo ${cmd_to_exec_in_sudo_privilege}#"},
+                        {"exec cmd in sudo prior (all env var pretained)#sudo -E ${cmd_to_execute_in_sudo_privilege)#"},
+                        {"*run cmd as another user with $HOME set as /home/anotheruser before cmd run#sudo -u ${another user} -H ${cmd}#su_sudo"}}},
             {"user +", {{"show certain user info#id ${username}#"},
                         {"add a user#sudo useradd ${username}#"},
                         {"add passwd for a user#sudo passwd ${username}#"},
