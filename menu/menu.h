@@ -9,7 +9,7 @@
 #include "gnu.h"
 #include "revision.h"
 #include "network.h"
-#include "downloader.h"
+#include "http.h"
 #include "docker.h"
 #include "filesys.h"
 #include "dev.h"
@@ -44,7 +44,7 @@ MenuItem* initdata(){
     method_map["gnu"] = &Method::get_gnu_ptr;
     method_map["revision"] = &Method::get_revision_ptr;
     method_map["network"] = &Method::get_network_ptr;
-    method_map["downloader"] = &Method::get_downloader_ptr;
+    method_map["http"] = &Method::get_http_ptr;
     method_map["docker"] = &Method::get_docker_ptr;
     method_map["dev"] = &Method::get_dev_ptr;
     method_map["filesys"] = &Method::get_filesys_ptr;

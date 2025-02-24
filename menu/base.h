@@ -22,7 +22,7 @@ public:
     MenuItem* get_gnu_ptr();
     MenuItem* get_revision_ptr();
     MenuItem* get_network_ptr();
-    MenuItem* get_downloader_ptr();
+    MenuItem* get_http_ptr();
     MenuItem* get_docker_ptr();
     MenuItem* get_filesys_ptr();
     MenuItem* get_dev_ptr();
