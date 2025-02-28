@@ -22,6 +22,7 @@ MenuItem* Method::get_dev_ptr(){
                          {"show usb info (verbose)#lsusb -v#"}}},
             {"lshw +", {{"show hardware info in summary#lshw -short#"},
                         {"show hardware info in html format#lshw -html > lshw.html#"}}},
+            {"disk +", {{"monitor disk read & write activities (only show active, update once in 5s)#iotop -o -d 5#"}}},
             {"memory +", {{"show memory info by reading dmi tables#dmidecode -t memory#"}}},
             {"interrupt +", {{"show irq statistics for each core & all source#cat /proc/interrupts#"},
                              {"show irq statistics for each core#cat /sys/kernel/irq/${irq_num}/per_cpu_count#"}}},
