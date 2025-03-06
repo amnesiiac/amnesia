@@ -12,33 +12,34 @@ struct MenuItem{
 
 class Method{
 public:
-    MenuItem* get_mac_ptr();
     MenuItem* get_blog_ptr();
     MenuItem* get_code_ptr();
     MenuItem* get_cicd_ptr();
     MenuItem* get_crontab_ptr();
-    MenuItem* get_transhell_ptr();
-    MenuItem* get_latex_ptr();
-    MenuItem* get_gnu_ptr();
-    MenuItem* get_revision_ptr();
-    MenuItem* get_network_ptr();
-    MenuItem* get_http_ptr();
     MenuItem* get_docker_ptr();
-    MenuItem* get_filesys_ptr();
     MenuItem* get_dev_ptr();
-    MenuItem* get_sysmonitor_ptr();
-    MenuItem* get_search_ptr();
-    MenuItem* get_user_ptr();
-    MenuItem* get_vim_ptr();
-    MenuItem* get_tmux_ptr();
-    MenuItem* get_os_ptr();
-    MenuItem* get_kernel_ptr();
-    MenuItem* get_time_ptr();
-    MenuItem* get_tool_ptr();
-    MenuItem* get_term_ptr();
     MenuItem* get_encryption_ptr();
+    MenuItem* get_filesys_ptr();
+    MenuItem* get_http_ptr();
+    MenuItem* get_gnu_ptr();
+    MenuItem* get_kernel_ptr();
+    MenuItem* get_latex_ptr();
+    MenuItem* get_mac_ptr();
+    MenuItem* get_misc_ptr();
+    MenuItem* get_network_ptr();
     MenuItem* get_performance_ptr();
     MenuItem* get_process_ptr();
+    MenuItem* get_revision_ptr();
+    MenuItem* get_search_ptr();
+    MenuItem* get_sysmonitor_ptr();
+    MenuItem* get_transhell_ptr();
+    MenuItem* get_tmux_ptr();
+    MenuItem* get_time_ptr();
+    MenuItem* get_os_ptr();
+    MenuItem* get_tool_ptr();
+    MenuItem* get_term_ptr();
+    MenuItem* get_user_ptr();
+    MenuItem* get_vim_ptr();
 };
 
 class MenuBuilder{  // singleton

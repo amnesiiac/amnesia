@@ -1,55 +1,90 @@
-!) todo: make the maximum window size automatic follow the width & height of terminal window size.
-0) todo: how to debug shuttle app logic hehavior --> get some log output to file?
-1) todo: when no test file to show, then no popup window action made, just stay there:
-   detect the first char if *, then popup, or nothing to do.
-2) todo: add help pages for showing how to control the shuttle panel.
-3) todo: let the popup menu use relative path, so that let the project portable.
-4) try enable menu open when hitting enter on a menu, but drop back on bash on a final list.
-5) try clear the search form content before hitting <tab> key to visualize the desc pages.!!!
-6) the backspace only available on macos in search mode, but failed to work on centos7 bash.
-7) try: make the editor like vim or just embeded nvim/vim inside.
+### # preview
+add asciinema of app usage here
 
+<hr>
+
+### # todo
+!) todo: make the max window size automatic follow the width & height of terminal window size.  
+!) todo: make the max tab width adaptive to the margin left on the right.  
+!) todo: when no test file to show, then no popup window action made, just stay there:  
+!) todo: let the popup menu use relative path, so that let the project portable.  
+!) disable menu close when hitting enter on middle tab, only jump back to shell when current menu is the last one.  
+!) try: make the editor like vim or just embeded nvim/vim inside.  
+!) todo: add help pages for showing how to control the shuttle panel.
+
+<hr>
+
+### # Restful design to organize the menu resources
+nested menu resources should be organized in order like:
+
+```text
+object + resource + operations
+```
+
+rather than
+
+```text
+operations + object + resource
+```
+
+<hr>
+
+### # project structure
+
+```txt
+.
+├── desc
+├── form.h
+├── jaro.h
+├── leven.h
+├── main.cpp
+├── main.o
+├── makefile
+├── menu
+│   ├── base.h
+│   ├── blog.h
+│   ├── cicd.h
+│   ├── code.h
+│   ├── crontab.h
+│   ├── dev.h
+│   ├── docker.h
+│   ├── encryption.h
+│   ├── filesys.h
+│   ├── gnu.h
+│   ├── http.h
+│   ├── kernel.h
+│   ├── latex.h
+│   ├── mac.h
+│   ├── menu.h
+│   ├── misc.h
+│   ├── network.h
+│   ├── os.h
+│   ├── performance.h
+│   ├── process.h
+│   ├── revision.h
+│   ├── search.h
+│   ├── sysmonitor.h
+│   ├── term.h
+│   ├── time_.h
+│   ├── tmux.h
+│   ├── tool.h
+│   ├── transhell.h
+│   ├── user.h
+│   └── vim.h
+├── out
+├── popup.h
+├── readme
+└── utils.h
+
+2 directories, 72 files
+```
+
+<hr>
+
+### # others
 todo: pipe implementation in c conclusion
 ref: https://medium.com/swlh/understanding-pipes-in-unix-with-a-sample-implementation-9fe110d36412#1569
 
 todo: a visual guide to caching inside gitlab ci/cd
 ref: https://about.gitlab.com/blog/2022/09/12/a-visual-guide-to-gitlab-ci-caching/
 
-todo: use RESTful order to manage cmd resources
-each menu name represent the resource that need to be view/manipulate, like:
-object + resource + operations
-rather than
-use object + operations + resource format
-
-
-current supported layer-1 tags
-
-mac +
-transhell
-blog +
-latex +
-gnu cmd +
-revision +
-network +
-downloader +
-ls series +
-docker +
-filesystem & devices +
-system activity monitoring +
-search +
-su/sudo/id/user/groups +
-nvim +
-tmux +
-crontab +
-kill proc +
-performance +
-debug +
-data serialization +
-encryption +
-ssh +
-language +
-ci/cd +
-alpine +
-tools +
-time +
-kernel +
