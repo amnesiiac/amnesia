@@ -14,9 +14,12 @@ MenuItem* Method::get_mac_ptr(){
                                        {"hide icon#defaults write com.apple.finder CreateDesktop -bool FALSE; killall Finder#"}}},
                    {"software install permission +", {{"disable install from all source#sudo spctl --master-disable#"},
                                                       {"enable install from all source#sudo spctl --master-enable#"}}},
+                   {"software startup +", {{"open a file with the default app#open ${filename}#"},
+                                           {"open certain app at default window#open -a ${appname}#"},
+                                           {"open a file with certain app#open -a ${appname} ${filename}#"}}},
                    {"show mac battery capacity#ioreg -rn AppleSmartBattery | grep -i capacity#"},
                    {"build mac app by applescript#osacompile -o ${appname.app} ${applescript.scpt}#"},
-                   {"shortcut +", {{"app windows switch over sequentially#command + ~#"},
+                   {"shortcut +", {{"switch over between app sequentially#command + ~#"},
                                    {"lock the screen#ctrl + command + q#"}}}}
         }
     };
