@@ -1,18 +1,16 @@
 ### # preview
 ![usage preview](./hi.gif)
 
-<hr>
 
 ### # todo
-!) todo: make the max window size automatic follow the width & height of terminal window size.  
-!) todo: make the max tab width adaptive to the margin left on the right.  
-!) todo: when no test file to show, then no popup window action made, just stay there:  
-!) todo: let the popup menu use relative path, so that let the project portable.  
+!) make the max window size automatic follow the width & height of terminal window size.  
+!) make the max tab width adaptive to the margin left on the right.  
+!) when no test file to show, then no popup window action made, just stay there:  
+!) let the popup menu use relative path, so that let the project portable.  
 !) disable menu close when hitting enter on middle tab, only jump back to shell when current menu is the last one.  
 !) try: make the editor like vim or just embeded nvim/vim inside.  
-!) todo: add help pages for showing how to control the shuttle panel.
+!) add help pages for showing how to control the shuttle panel.
 
-<hr>
 
 ### # restful design to organize the menu resources
 nested menu resources should be organized in order like:
@@ -27,7 +25,6 @@ rather than
 operations + object + resource
 ```
 
-<hr>
 
 ### # project structure
 
@@ -79,7 +76,6 @@ operations + object + resource
 2 directories, 72 files
 ```
 
-<hr>
 
 ### # others
 todo: pipe implementation in c conclusion  
