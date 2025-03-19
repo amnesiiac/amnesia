@@ -33,7 +33,7 @@ MenuItem* Method::get_filesys_ptr(){
                                         {"set dir stack tip dir as certain dir (switch to certain dir)#pushd +n#"}}}}},
             {"file & dir ops +", {{"show list of file/dir (newest modified the first)#ls -lht#"},
                                   {"show list of file/dir (oldest modified the first)#ls -lhtr#"},
-                                  {"show file/dir in a table format#ls | column -c ${num_item_each_row}#"},
+                                  {"show file/dir in table format#ls | column -c ${num_item_each_row}#"},
                                   {"list size of file/dir sorted under cur dir#du -ah --max-depth=1 | sort -h#"},
                                   {"remove file/dir +", {{"rm all except for certain object in certain dir#shopt -s extglob && rm -rf !(${folder or file name})#"},
                                                          {"rm file startwith hypen '-'#rm ./${-filename} or rm -- ${-filename}#"}}}}},
