@@ -7,10 +7,10 @@ MenuItem* Method::get_time_ptr(){
     MenuItem* time_ptr = new MenuItem;
     time_ptr->name = "time";
     time_ptr->submenu = {
-        {"time +", {
-            {"show date info of current machine or NTP server configured time#date#"},
-            {"time since kernel bootup (container shared with host, vm own exclusively)#uptime#"},
-            {"show current timezone info (not NTP time)#zdump -c \"$(date +'%Y-%m-%d %H:%M:%S')\" /etc/localtime#"}},
+        {"time +", {{"show date info of current machine or NTP server configured time#date#"},
+                    {"time since kernel bootup (container shared with host, vm own exclusively)#uptime#"},
+                    {"show current timezone info (not NTP time)#zdump -c \"$(date +'%Y-%m-%d %H:%M:%S')\" /etc/localtime#"},
+                    {"get time stats for the cmd execution (total, user, sys))#time ${cmd_to_run}#"}},
         },
     };
     return time_ptr;
