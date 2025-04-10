@@ -103,8 +103,8 @@ MenuItem* Method::get_revision_ptr(){
                                            {"show most recent tag reachable for certain commit (abbrev=0 to show only tag without hash postfix)#git describe --tags --abbrev=0 ${commitid}#"}}},
                        {"git rev-parse +", {{"show full hash value of certain commit (e.g. HEAD,HEAD~1...)#git rev-parse ${commit}#"},
                                             {"show shortened hash value of certain commit (e.g. HEAD,HEAD~1...)#git rev-parse --short ${commit}#"}}},
-                       {"git ls-tree +", {{"show all traced file names non-recursively for a commit#git ls-tree --name-only ${commit}#"},
-                                          {"show all traced file names recursively for a commit#git ls-tree --name-only -r ${commit}#"}}}
+                       {"git ls-tree +", {{"show all git traced file names non-recursively for a commit#git ls-tree --name-only ${commit}#"},
+                                          {"show all git traced file names recursively for a commit#git ls-tree --name-only -r ${commit}#"}}}
 					  }},
             {"hg +", {{"hg help +", {{"show available hg format templates#hg help templates#"},
                                      {"show help page for hg subcommand(e.g. hg help diff)#hg help ${subcommand}#"}}},
